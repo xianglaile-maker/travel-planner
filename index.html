@@ -2,238 +2,539 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>旅行计划 - 实时协作</title>
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="旅行计划">
-<meta name="theme-color" content="#5B7FFF">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
+<title>旅行计划</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--primary:#5B7FFF;--primary-light:#E8EDFF;--green:#34C759;--green-bg:#E8F8ED;--orange:#FF9500;--orange-bg:#FFF4E5;--red:#FF3B30;--red-bg:#FFEDEC;--gray:#8E8E93;--gray-bg:#F2F2F7;--bg:#F5F6FA;--card:#FFF;--text:#1C1C1E;--text2:#6B7280;--border:#E5E7EB;--radius:14px;--radius-sm:10px;--shadow:0 2px 12px rgba(0,0,0,.06);--safe-bottom:env(safe-area-inset-bottom,0px);--tab-height:56px}
+:root{--p:#5B7FFF;--pl:#E8EDFF;--g:#34C759;--gb:#E8F8ED;--o:#FF9500;--ob:#FFF4E5;--r:#FF3B30;--rb:#FFEDEC;--k:#8E8E93;--kb:#F2F2F7;--bg:#F5F6FA;--c:#FFF;--t:#1C1C1E;--t2:#6B7280;--b:#E5E7EB;--rd:14px;--rs:10px;--st:env(safe-area-inset-bottom,0px);--th:56px}
 html,body{height:100%;overflow:hidden}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);-webkit-tap-highlight-color:transparent;display:flex;flex-direction:column;height:100vh;height:100dvh}
-.header{background:linear-gradient(135deg,#5B7FFF 0%,#7C5CFC 100%);color:#fff;padding:14px 16px 12px;text-align:center;flex-shrink:0;padding-top:max(14px,env(safe-area-inset-top,14px))}
-.header h1{font-size:18px;font-weight:700}
-.header .sub{font-size:12px;opacity:.8;margin-top:1px}
-.main{flex:1;overflow:hidden;position:relative}
-.page{display:none;height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch}
-.page.active{display:flex;flex-direction:column}
-.tabbar{display:flex;background:var(--card);border-top:1px solid var(--border);flex-shrink:0;padding-bottom:var(--safe-bottom);height:calc(var(--tab-height)+var(--safe-bottom))}
-.tab-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;border:none;background:none;font-size:10px;color:var(--gray);cursor:pointer;padding:4px 0;gap:1px;font-family:inherit}
-.tab-item .tab-icon{font-size:22px;line-height:1.2}
-.tab-item.active{color:var(--primary)}
-.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;margin-bottom:10px}
-.page-inner{padding:12px;max-width:600px;margin:0 auto;width:100%;flex:1;overflow-y:auto}
-.card-title{font-size:15px;font-weight:600;margin-bottom:12px}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:4px;padding:10px 18px;border:none;border-radius:var(--radius-sm);font-size:14px;font-weight:500;font-family:inherit;cursor:pointer}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--t);-webkit-tap-highlight-color:transparent;display:flex;flex-direction:column;height:100vh;height:100dvh}
+.hdr{background:linear-gradient(135deg,#5B7FFF,#7C5CFC);color:#fff;padding:14px 16px 12px;text-align:center;flex-shrink:0;padding-top:max(14px,env(safe-area-inset-top,14px))}
+.hdr h1{font-size:18px;font-weight:700}
+.hdr .s{font-size:12px;opacity:.8;margin-top:1px}
+.mn{flex:1;overflow:hidden;position:relative}
+.pg{display:none;height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.pg.act{display:flex;flex-direction:column}
+.tb{display:flex;background:var(--c);border-top:1px solid var(--b);flex-shrink:0;padding-bottom:var(--st);height:calc(var(--th)+var(--st))}
+.ti{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;border:none;background:none;font-size:10px;color:var(--k);cursor:pointer;padding:4px 0;gap:1px;font-family:inherit}
+.ti .ic{font-size:22px;line-height:1.2}
+.ti.act{color:var(--p)}
+.cd{background:var(--c);border-radius:var(--rd);box-shadow:0 2px 12px rgba(0,0,0,.06);padding:16px;margin-bottom:10px}
+.pi{padding:12px;max-width:600px;margin:0 auto;width:100%;flex:1;overflow-y:auto}
+.ct{font-size:15px;font-weight:600;margin-bottom:12px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:4px;padding:10px 18px;border:none;border-radius:var(--rs);font-size:14px;font-weight:500;font-family:inherit;cursor:pointer}
 .btn:active{transform:scale(.97);opacity:.8}
-.btn-primary{background:var(--primary);color:#fff}
-.btn-outline{background:none;border:1.5px solid var(--border);color:var(--text2)}
-.btn-block{width:100%}
+.btn-p{background:var(--p);color:#fff}
+.btn-o{background:none;border:1.5px solid var(--b);color:var(--t2)}
+.btn-b{width:100%}
 .btn-xs{padding:4px 10px;font-size:11px;border-radius:8px}
-input,textarea{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:15px;font-family:inherit;background:var(--bg);color:var(--text);outline:none}
-input:focus,textarea:focus{border-color:var(--primary)}
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;align-items:flex-end;justify-content:center}
-.modal-overlay.show{display:flex}
-.modal-content{background:var(--card);border-radius:var(--radius) var(--radius) 0 0;padding:20px 16px;width:100%;max-width:500px;max-height:85vh;overflow-y:auto;padding-bottom:max(20px,var(--safe-bottom))}
-.modal-title{font-size:17px;font-weight:600;margin-bottom:14px}
-.modal-actions{display:flex;gap:8px;margin-top:14px}
-.modal-actions .btn{flex:1}
-#page-chat{padding:0}
-.chat-msgs{flex:1;overflow-y:auto;padding:10px 12px;display:flex;flex-direction:column;gap:8px}
-.chat-input-area{display:flex;gap:8px;padding:8px 12px;background:var(--card);border-top:1px solid var(--border);flex-shrink:0;padding-bottom:max(8px,var(--safe-bottom))}
-.chat-input-area input{flex:1;border-radius:20px;padding:9px 14px;font-size:15px}
-.chat-input-area .btn{border-radius:20px;padding:9px 18px;flex-shrink:0}
-.chat-name-tag{font-size:11px;padding:2px 8px;border-radius:10px;background:var(--primary-light);color:var(--primary);margin-right:6px}
-.msg-bubble{max-width:85%;padding:8px 12px;border-radius:14px;font-size:14px;line-height:1.5;word-break:break-word}
-.msg-self{align-self:flex-end}
-.msg-self .msg-bubble{background:var(--primary);color:#fff;border-bottom-right-radius:4px}
-.msg-other{align-self:flex-start}
-.msg-other .msg-bubble{background:var(--card);color:var(--text);border:1px solid var(--border);border-bottom-left-radius:4px}
-.msg-row{display:flex;align-items:flex-end;gap:6px;width:100%}
-.msg-meta{font-size:11px;color:var(--text2);margin-bottom:2px}
-.chat-welcome{text-align:center;padding:30px 20px;color:var(--text2);font-size:14px}
-.plan-item{border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:12px;margin-bottom:10px}
-.plan-name{font-weight:600;font-size:14px}
-.plan-meta{font-size:12px;color:var(--text2);margin:2px 0}
-.plan-note{font-size:12px;color:var(--text2);background:var(--gray-bg);padding:6px 10px;border-radius:8px;margin:6px 0}
-.vote-group{display:flex;gap:4px;margin:6px 0;flex-wrap:wrap}
-.vote-btn{padding:4px 12px;border:1.5px solid var(--border);border-radius:16px;font-size:12px;background:none;cursor:pointer;font-family:inherit}
-.vote-btn.yes{color:var(--green);border-color:var(--green)}
-.vote-btn.yes.active{background:var(--green);color:#fff}
-.vote-btn.maybe{color:var(--orange);border-color:var(--orange)}
-.vote-btn.maybe.active{background:var(--orange);color:#fff}
-.vote-btn.no{color:var(--red);border-color:var(--red)}
-.vote-btn.no.active{background:var(--red);color:#fff}
-.vote-count{font-size:11px;color:var(--text2)}
-.person-badge{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:10px;font-size:11px;margin:1px}
-.p-yes{background:var(--green-bg);color:#1A7D32}
-.p-maybe{background:var(--orange-bg);color:#B87500}
-.p-no{background:var(--red-bg);color:#B81C14}
-.plan-header{display:flex;justify-content:space-between;align-items:flex-start}
-.summary-bar{display:flex;gap:3px;height:20px;border-radius:10px;overflow:hidden;margin:6px 0;background:var(--gray-bg)}
-.seg-yes{background:var(--green)}
-.seg-maybe{background:var(--orange)}
-.seg-no{background:var(--red)}
-.winning-badge{display:inline-block;font-size:10px;background:var(--green);color:#fff;padding:2px 8px;border-radius:10px;margin-left:6px}
-.member-tag{display:inline-flex;align-items:center;gap:4px;padding:4px 12px;border-radius:16px;font-size:13px;background:var(--primary-light);color:var(--primary);margin:3px}
-.member-tag .remove{cursor:pointer;font-size:15px;opacity:.5}
-.member-grid{display:flex;flex-wrap:wrap;gap:4px}
-.day-item{border-left:3px solid var(--primary);padding-left:12px;margin-bottom:14px}
-.day-title{font-weight:600;font-size:14px;color:var(--primary)}
-.activity-row{display:flex;gap:8px;margin:4px 0;font-size:13px}
-.activity-time{min-width:42px;font-weight:600;color:var(--primary);font-size:12px;flex-shrink:0}
-.stat-row{display:flex;gap:8px;margin-bottom:10px}
-.stat-box{flex:1;text-align:center;padding:10px;border-radius:var(--radius-sm);background:var(--gray-bg)}
-.stat-box .num{font-size:22px;font-weight:700}
-.stat-box .lbl{font-size:11px;color:var(--text2);margin-top:2px}
-.stat-box.green{background:var(--green-bg)}
-.stat-box.green .num{color:var(--green)}
-.stat-box.orange{background:var(--orange-bg)}
-.stat-box.orange .num{color:var(--orange)}
-.stat-box.purple{background:var(--primary-light)}
-.stat-box.purple .num{color:var(--primary)}
-.online-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--green);margin-right:4px}
-.rec-tag{display:inline-block;font-size:10px;padding:1px 8px;border-radius:8px;background:var(--primary-light);color:var(--primary);margin:1px}
-.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.8);color:#fff;padding:8px 18px;border-radius:20px;font-size:13px;z-index:300;opacity:0;pointer-events:none}
-.toast.show{opacity:1}
-.empty-state{text-align:center;padding:24px 16px;color:var(--text2)}
-.empty-state .icon{font-size:40px;margin-bottom:8px}
-.empty-state p{font-size:13px;line-height:1.6}
-@media(min-width:600px){.page-inner{padding:16px}}
+input,textarea{width:100%;padding:10px 12px;border:1.5px solid var(--b);border-radius:var(--rs);font-size:15px;font-family:inherit;background:var(--bg);color:var(--t);outline:none}
+input:focus,textarea:focus{border-color:var(--p)}
+.inl{display:flex;gap:8px}
+.inl input{flex:1}
+
+/* Chat */
+#pg-chat{padding:0}
+.chat{flex:1;overflow-y:auto;padding:10px 12px;display:flex;flex-direction:column;gap:8px}
+.chat-in{display:flex;gap:8px;padding:8px 12px;background:var(--c);border-top:1px solid var(--b);flex-shrink:0;padding-bottom:max(8px,var(--st))}
+.chat-in input{flex:1;border-radius:20px;padding:9px 14px;font-size:15px}
+.chat-in .btn{border-radius:20px;padding:9px 18px;flex-shrink:0}
+.nt{font-size:11px;padding:2px 8px;border-radius:10px;background:var(--pl);color:var(--p);margin-right:6px}
+.bb{max-width:85%;padding:8px 12px;border-radius:14px;font-size:14px;line-height:1.5;word-break:break-word}
+.ms{align-self:flex-end}
+.ms .bb{background:var(--p);color:#fff;border-bottom-right-radius:4px}
+.mo{align-self:flex-start}
+.mo .bb{background:var(--c);color:var(--t);border:1px solid var(--b);border-bottom-left-radius:4px}
+.mr{display:flex;align-items:flex-end;gap:6px;width:100%}
+.mm{font-size:11px;color:var(--t2);margin-bottom:2px}
+.wc{text-align:center;padding:30px 20px;color:var(--t2);font-size:14px}
+
+/* Plans */
+.pl{border:1.5px solid var(--b);border-radius:var(--rs);padding:12px;margin-bottom:10px}
+.pn{font-weight:600;font-size:14px}
+.pm{font-size:12px;color:var(--t2);margin:2px 0}
+.pno{font-size:12px;color:var(--t2);background:var(--kb);padding:6px 10px;border-radius:8px;margin:6px 0}
+.vg{display:flex;gap:4px;margin:6px 0;flex-wrap:wrap}
+.vb{padding:4px 12px;border:1.5px solid var(--b);border-radius:16px;font-size:12px;background:none;cursor:pointer;font-family:inherit}
+.vb.y{color:var(--g);border-color:var(--g)}
+.vb.y.act{background:var(--g);color:#fff}
+.vb.m{color:var(--o);border-color:var(--o)}
+.vb.m.act{background:var(--o);color:#fff}
+.vb.n{color:var(--r);border-color:var(--r)}
+.vb.n.act{background:var(--r);color:#fff}
+.vc{font-size:11px;color:var(--t2)}
+.pb{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:10px;font-size:11px;margin:1px}
+.py{background:var(--gb);color:#1A7D32}
+.pm2{background:var(--ob);color:#B87500}
+.pn2{background:var(--rb);color:#B81C14}
+.ph{display:flex;justify-content:space-between;align-items:flex-start}
+.sb{display:flex;gap:3px;height:20px;border-radius:10px;overflow:hidden;margin:6px 0;background:var(--kb)}
+.sy{background:var(--g)}
+.sm{background:var(--o)}
+.sn{background:var(--r)}
+.wb{display:inline-block;font-size:10px;background:var(--g);color:#fff;padding:2px 8px;border-radius:10px;margin-left:6px}
+
+/* Members */
+.mt{display:inline-flex;align-items:center;gap:4px;padding:4px 12px;border-radius:16px;font-size:13px;background:var(--pl);color:var(--p);margin:3px}
+.mt .rm{cursor:pointer;font-size:15px;opacity:.5}
+.mg{display:flex;flex-wrap:wrap;gap:4px}
+
+/* Itinerary */
+.di{border-left:3px solid var(--p);padding-left:12px;margin-bottom:14px}
+.dt2{font-weight:600;font-size:14px;color:var(--p)}
+.ar{display:flex;gap:8px;margin:4px 0;font-size:13px}
+.at{min-width:42px;font-weight:600;color:var(--p);font-size:12px;flex-shrink:0}
+
+/* Results */
+.sr{display:flex;gap:8px;margin-bottom:10px}
+.sb2{flex:1;text-align:center;padding:10px;border-radius:var(--rs);background:var(--kb)}
+.sb2 .num{font-size:22px;font-weight:700}
+.sb2 .lbl{font-size:11px;color:var(--t2);margin-top:2px}
+.sb2.g{background:var(--gb)}.sb2.g .num{color:var(--g)}
+.sb2.o{background:var(--ob)}.sb2.o .num{color:var(--o)}
+.sb2.p{background:var(--pl)}.sb2.p .num{color:var(--p)}
+.od{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--g);margin-right:4px}
+.rt{display:inline-block;font-size:10px;padding:1px 8px;border-radius:8px;background:var(--pl);color:var(--p);margin:1px}
+
+/* Toast */
+.tt{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.8);color:#fff;padding:8px 18px;border-radius:20px;font-size:13px;z-index:300;opacity:0;pointer-events:none}
+.tt.sh{opacity:1}
+.em{text-align:center;padding:24px 16px;color:var(--t2)}
+.em .ic2{font-size:40px;margin-bottom:8px}
+.em p{font-size:13px;line-height:1.6}
+.pa::-webkit-scrollbar,.chat::-webkit-scrollbar{display:none}
+@media(min-width:600px){.pi{padding:16px}}
 </style>
 </head>
 <body>
-<div class="header"><h1>🗺️ 旅行计划</h1><div class="sub">实时协作 · 一起商量出行 🎉</div></div>
-<div class="main">
-<div class="page active" id="page-chat">
-<div class="chat-msgs" id="chat-msgs"><div class="chat-welcome"><div style="font-size:40px;margin-bottom:8px;">💬</div><p>欢迎来到旅行计划聊天室！一起商量吧 🎉</p></div></div>
-<div class="chat-input-area"><input type="text" id="chat-input" placeholder="输入消息..." autocomplete="off"><button class="btn btn-primary" onclick="sendMessage()">发送</button></div>
+<div class="hdr"><h1>🗺️ 旅行计划</h1><div class="s">实时协作 · 一起商量出行 🎉</div></div>
+<div class="mn">
+<div class="pg act" id="pg-chat">
+<div class="chat" id="chat"><div class="wc"><div style="font-size:40px;margin-bottom:8px;">💬</div><p>欢迎来到旅行计划聊天室！一起商量吧 🎉</p></div></div>
+<div class="chat-in"><input type="text" id="ci" placeholder="输入消息..." autocomplete="off"><button class="btn btn-p" id="cs" onclick="sm()">发送</button></div>
 </div>
-<div class="page" id="page-plans">
-<div class="page-inner">
-<div class="card"><div class="card-title">🤖 智能推荐</div><p style="font-size:13px;color:var(--text2);margin-bottom:10px;">一键推荐适合4-8人、三天内的旅行方案</p><button class="btn btn-primary btn-block" onclick="aiRecommend()">✨ 智能推荐方案</button></div>
-<div class="card"><div class="card-title">📋 出行方案</div><button class="btn btn-primary btn-block" onclick="showModal('plan-modal')">＋ 添加方案</button></div>
-<div id="plans-list"></div>
-</div>
-</div>
-<div class="page" id="page-results"><div class="page-inner"><div id="result-overview"></div><div id="result-detail"></div></div></div>
-<div class="page" id="page-itinerary">
-<div class="page-inner">
-<div class="card"><div class="card-title">🗓️ 最终行程</div><p style="font-size:13px;color:var(--text2);margin-bottom:10px;">确定目的地后安排每天的行程</p><button class="btn btn-primary btn-block" onclick="showModal('day-modal')">＋ 添加行程日</button></div>
-<div id="itinerary-list"></div>
+<div class="pg" id="pg-plans">
+<div class="pi">
+<div class="cd"><div class="ct">🤖 智能推荐</div><p style="font-size:13px;color:var(--t2);margin-bottom:10px;">一键推荐适合的旅行方案</p><button class="btn btn-p btn-b" onclick="ar()" id="recBtn">✨ 智能推荐方案</button></div>
+<div class="cd"><div class="ct">📋 出行方案</div><button class="btn btn-p btn-b" onclick="sh('pm')">＋ 添加方案</button></div>
+<div id="pl"></div>
 </div>
 </div>
-<div class="page" id="page-members">
-<div class="page-inner">
-<div class="card"><div class="card-title">👥 同行伙伴</div><div style="display:flex;gap:8px;margin-bottom:10px;"><input type="text" id="member-input" placeholder="输入名字..." style="flex:1;" onkeydown="if(event.key==='Enter')addMember()"><button class="btn btn-primary" onclick="addMember()">添加</button></div><div id="members-list" class="member-grid"></div></div>
-<div class="card"><div class="card-title">🟢 在线成员</div><div id="online-list" class="member-grid"><div class="empty-state" style="padding:12px;"><p>暂无在线成员</p></div></div></div>
+<div class="pg" id="pg-results"><div class="pi"><div id="ro"></div><div id="rd"></div></div></div>
+<div class="pg" id="pg-itin"><div class="pi"><div class="cd"><div class="ct">🗓️ 最终行程</div><p style="font-size:13px;color:var(--t2);margin-bottom:10px;">确定目的地后安排每天的行程</p><button class="btn btn-p btn-b" onclick="sh('dm')">＋ 添加行程日</button></div><div id="il"></div></div></div>
+<div class="pg" id="pg-mem"><div class="pi"><div class="cd"><div class="ct">👥 同行伙伴</div><div class="inl" style="margin-bottom:10px;"><input type="text" id="mi" placeholder="输入名字..." onkeydown="if(event.key==='Enter')am()"><button class="btn btn-p" onclick="am()">添加</button></div><div id="ml" class="mg"></div></div><div class="cd"><div class="ct">🟢 在线成员</div><div id="ol" class="mg"><div class="em" style="padding:12px"><p>暂无在线成员</p></div></div></div></div></div>
 </div>
+<div class="tb">
+<button class="ti act" data-p="chat"><span class="ic">💬</span>聊天</button>
+<button class="ti" data-p="plans"><span class="ic">📋</span>方案</button>
+<button class="ti" data-p="results"><span class="ic">📊</span>结果</button>
+<button class="ti" data-p="itin"><span class="ic">🗓️</span>行程</button>
+<button class="ti" data-p="mem"><span class="ic">👥</span>伙伴</button>
 </div>
-</div>
-<div class="tabbar">
-<button class="tab-item active" data-page="chat"><span class="tab-icon">💬</span>聊天</button>
-<button class="tab-item" data-page="plans"><span class="tab-icon">📋</span>方案</button>
-<button class="tab-item" data-page="results"><span class="tab-icon">📊</span>结果</button>
-<button class="tab-item" data-page="itinerary"><span class="tab-icon">🗓️</span>行程</button>
-<button class="tab-item" data-page="members"><span class="tab-icon">👥</span>伙伴</button>
-</div>
-<div class="toast" id="toast"></div>
+<div class="tt" id="tt"></div>
 
-<div class="modal-overlay" id="plan-modal">
-<div class="modal-content">
-<div class="modal-title">添加出行方案</div>
-<div class="input-group"><label>方案名称 *</label><input type="text" id="plan-name" placeholder="例如：洛阳三日游"></div>
-<div class="input-group"><label>出发日期</label><input type="date" id="plan-date"></div>
-<div class="input-group"><label>结束日期</label><input type="date" id="plan-date-end"></div>
-<div class="input-group"><label>目的地</label><input type="text" id="plan-dest" placeholder="例如：洛阳"></div>
-<div class="input-group"><label>预算/备注</label><textarea id="plan-note" placeholder="费用预估、出行方式等"></textarea></div>
-<div class="modal-actions"><button class="btn btn-outline" onclick="closeModal('plan-modal')">取消</button><button class="btn btn-primary" onclick="addPlan()">添加</button></div>
-</div>
+<!-- Name banner (not blocking modal) -->
+<div id="nb" style="display:none;background:linear-gradient(135deg,#5B7FFF,#7C5CFC);color:#fff;padding:20px 16px;text-align:center;position:fixed;bottom:0;left:0;right:0;z-index:200;padding-bottom:max(20px,env(safe-area-inset-bottom,0px));animation:slideUp .3s ease">
+<div style="font-size:32px;margin-bottom:8px;">👋</div>
+<div style="font-size:16px;font-weight:600;margin-bottom:4px;">欢迎来到旅行计划！</div>
+<div style="font-size:13px;opacity:.9;margin-bottom:12px;">输入你的名字加入聊天和投票</div>
+<div class="inl" style="max-width:300px;margin:0 auto;"><input type="text" id="ni" placeholder="输入名字..." style="background:#fff;border:none;border-radius:20px;"><button class="btn" style="background:#fff;color:#5B7FFF;border-radius:20px;font-weight:600;" onclick="sn()">进入</button></div>
 </div>
 
-<div class="modal-overlay" id="day-modal">
-<div class="modal-content">
-<div class="modal-title">添加行程日</div>
-<div class="input-group"><label>日期</label><input type="date" id="day-date"></div>
-<div class="input-group"><label>标题</label><input type="text" id="day-title" placeholder="例如：第一天 - 抵达洛阳"></div>
-<div class="input-group"><label>活动安排</label><textarea id="day-activities" rows="4" placeholder="每行一个活动，如：&#10;09:00 集合出发&#10;12:00 午餐"></textarea></div>
-<div class="modal-actions"><button class="btn btn-outline" onclick="closeModal('day-modal')">取消</button><button class="btn btn-primary" onclick="addDay()">添加</button></div>
+<!-- Modals -->
+<div id="pm" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;align-items:flex-end;justify-content:center;" onclick="if(event.target===this)h('pm')">
+<div style="background:var(--c);border-radius:var(--rd) var(--rd) 0 0;padding:20px 16px;width:100%;max-width:500px;max-height:85vh;overflow-y:auto;padding-bottom:max(20px,var(--st));animation:slideUp .2s ease">
+<div style="font-size:17px;font-weight:600;margin-bottom:14px">添加出行方案</div>
+<div style="margin-bottom:10px"><label style="font-size:12px;color:var(--t2)">方案名称</label><input id="pn" placeholder="例如：洛阳三日游"></div>
+<div style="margin-bottom:10px"><label style="font-size:12px;color:var(--t2)">出发日期</label><input type="date" id="pd"></div>
+<div style="margin-bottom:10px"><label style="font-size:12px;color:var(--t2)">结束日期</label><input type="date" id="pde"></div>
+<div style="margin-bottom:10px"><label style="font-size:12px;color:var(--t2)">目的地</label><input id="pdest" placeholder="例如：洛阳"></div>
+<div style="margin-bottom:10px"><label style="font-size:12px;color:var(--t2)">备注</label><textarea id="pnote" rows="3" placeholder="费用预估、出行方式等"></textarea></div>
+<div style="display:flex;gap:8px;margin-top:14px"><button class="btn btn-o" style="flex:1" onclick="h('pm')">取消</button><button class="btn btn-p" style="flex:1" onclick="ap()">添加</button></div>
 </div>
 </div>
 
-<div class="modal-overlay" id="name-modal" style="align-items:center;">
-<div class="modal-content" style="border-radius:var(--radius);max-width:360px;padding:24px;">
-<div style="text-align:center;font-size:40px;margin-bottom:10px;">👋</div>
-<div class="modal-title" style="text-align:center;">输入你的名字</div>
-<p style="font-size:13px;color:var(--text2);text-align:center;margin-bottom:14px;">这是你在聊天和投票中显示的名字</p>
-<input type="text" id="my-name-input" placeholder="输入名字..." style="text-align:center;width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:15px;margin-bottom:14px;">
-<button class="btn btn-primary btn-block" onclick="setMyName()">进入聊天室</button>
+<div id="dm" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;align-items:flex-end;justify-content:center;" onclick="if(event.target===this)h('dm')">
+<div style="background:var(--c);border-radius:var(--rd) var(--rd) 0 0;padding:20px 16px;width:100%;max-width:500px;max-height:85vh;overflow-y:auto;padding-bottom:max(20px,var(--st));animation:slideUp .2s ease">
+<div style="font-size:17px;font-weight:600;margin-bottom:14px">添加行程日</div>
+<div style="margin-bottom:10px"><label style="font-size:12px;color:var(--t2)">日期</label><input type="date" id="dd"></div>
+<div style="margin-bottom:10px"><label style="font-size:12px;color:var(--t2)">标题</label><input id="dt" placeholder="第一天 - 抵达洛阳"></div>
+<div style="margin-bottom:10px"><label style="font-size:12px;color:var(--t2)">活动安排</label><textarea id="da" rows="4" placeholder="每行一个活动，如：&#10;09:00 集合出发&#10;12:00 午餐"></textarea></div>
+<div style="display:flex;gap:8px;margin-top:14px"><button class="btn btn-o" style="flex:1" onclick="h('dm')">取消</button><button class="btn btn-p" style="flex:1" onclick="ad()">添加</button></div>
 </div>
 </div>
 
-<div class="modal-overlay" id="rec-modal">
-<div class="modal-content">
-<div class="modal-title">✨ 智能推荐</div>
-<div id="rec-loading" style="text-align:center;padding:20px;color:var(--text2);">
-<div style="font-size:36px;margin-bottom:10px;">⏳</div>
-<p>正在为你推荐方案...</p>
-</div>
-<div id="rec-results" style="display:none;">
-<p style="font-size:13px;color:var(--text2);margin-bottom:12px;">点击下方方案一键添加 👇</p>
-<div id="rec-list"></div>
-<div class="modal-actions" style="margin-top:12px;">
-<button class="btn btn-outline" onclick="closeModal('rec-modal')">关闭</button>
-<button class="btn btn-primary" onclick="aiRecommend()">🔄 换一批</button>
-</div>
-</div>
+<div id="rm" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;align-items:flex-end;justify-content:center;" onclick="if(event.target===this)h('rm')">
+<div style="background:var(--c);border-radius:var(--rd) var(--rd) 0 0;padding:20px 16px;width:100%;max-width:500px;max-height:85vh;overflow-y:auto;padding-bottom:max(20px,var(--st));animation:slideUp .2s ease">
+<div style="font-size:17px;font-weight:600;margin-bottom:14px">✨ 智能推荐</div>
+<div id="rl" style="text-align:center;padding:20px;color:var(--t2)"><div style="font-size:36px;margin-bottom:10px;">⏳</div><p>正在为你推荐方案...</p></div>
+<div id="rr" style="display:none"><p style="font-size:13px;color:var(--t2);margin-bottom:12px;">点击下方方案一键添加 👇</p><div id="rcl"></div><div style="display:flex;gap:8px;margin-top:12px"><button class="btn btn-o" style="flex:1" onclick="h('rm')">关闭</button><button class="btn btn-p" style="flex:1" onclick="ar()">🔄 换一批</button></div></div>
 </div>
 </div>
 
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 <script>
-var fc={apiKey:"AIzaSyBMdduAkyVSdvz3sXtlB3jAW7L_yhin2VQ",authDomain:"travel-planner-2b162.firebaseapp.com",databaseURL:"https://travel-planner-2b162-default-rtdb.firebaseio.com",projectId:"travel-planner-2b162",storageBucket:"travel-planner-2b162.firebasestorage.app",messagingSenderId:"20555551861",appId:"1:20555551861:web:375a0d4cd15363f7da143c"};
-firebase.initializeApp(fc);
-var db=firebase.database();
-var myName=localStorage.getItem('travel_my_name')||'',confirmedPlanId=null,curM=[],tt;
-function st(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(function(){t.classList.remove('show')},2000)}
-function sm(i){document.getElementById(i).classList.add('show')}
-function cm(i){document.getElementById(i).classList.remove('show')}
-document.querySelectorAll('.modal-overlay').forEach(function(m){m.addEventListener('click',function(e){if(e.target===this)this.classList.remove('show')})});
+// Load Firebase with fallback
+var db = null;
+var fbReady = false;
+var offlineMode = false;
+var localData = { members: {}, plans: {}, votes: {}, itinerary: {}, messages: [], online: {} };
+var myName = localStorage.getItem('tn') || '';
+
+try {
+  // Try loading Firebase
+  var s = document.createElement('script');
+  s.src = 'https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js';
+  s.onload = function() {
+    var s2 = document.createElement('script');
+    s2.src = 'https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js';
+    s2.onload = function() {
+      try {
+        firebase.initializeApp({
+          apiKey: "AIzaSyBMdduAkyVSdvz3sXtlB3jAW7L_yhin2VQ",
+          authDomain: "travel-planner-2b162.firebaseapp.com",
+          databaseURL: "https://travel-planner-2b162-default-rtdb.firebaseio.com",
+          projectId: "travel-planner-2b162",
+          storageBucket: "travel-planner-2b162.firebasestorage.app",
+          messagingSenderId: "20555551861",
+          appId: "1:20555551861:web:375a0d4cd15363f7da143c"
+        });
+        db = firebase.database();
+        fbReady = true;
+        console.log('Firebase ready');
+        initApp();
+      } catch(e) {
+        console.log('Firebase init error:', e);
+        offlineMode = true;
+        initApp();
+      }
+    };
+    s2.onerror = function() { offlineMode = true; initApp(); };
+    document.body.appendChild(s2);
+  };
+  s.onerror = function() { offlineMode = true; initApp(); };
+  document.body.appendChild(s);
+} catch(e) {
+  offlineMode = true;
+}
+
+// ====== Local Storage fallback ======
+function saveLocal() { try { localStorage.setItem('td', JSON.stringify(localData)); } catch(e) {} }
+function loadLocal() { try { var d = localStorage.getItem('td'); if (d) localData = JSON.parse(d); } catch(e) {} }
+
+// ====== Toast ======
+var _tt;
+function toast(m){var t=document.getElementById('tt');t.textContent=m;t.classList.add('sh');clearTimeout(_tt);_tt=setTimeout(function(){t.classList.remove('sh')},2000)}
+
+// ====== Helpers ======
+function sh(id){document.getElementById(id).style.display='flex'}
+function h(id){document.getElementById(id).style.display='none'}
 function esc(t){if(!t)return'';var d=document.createElement('div');d.textContent=t;return d.innerHTML}
-document.querySelectorAll('.tab-item').forEach(function(b){b.addEventListener('click',function(){document.querySelectorAll('.tab-item').forEach(function(x){x.classList.remove('active')});document.querySelectorAll('.page').forEach(function(x){x.classList.remove('active')});this.classList.add('active');document.getElementById('page-'+this.dataset.page).classList.add('active')})});
-if(!myName)sm('name-modal');
-function setMyName(){var n=document.getElementById('my-name-input').value.trim();if(!n){st('请输入名字');return}myName=n;localStorage.setItem('travel_my_name',myName);cm('name-modal');db.ref('members').once('value',function(s){var ms=s.val()||{};if(!ms[n])db.ref('members/'+n).set(true)});var or=db.ref('online/'+n);or.set(true);or.onDisconnect().remove();setInterval(function(){db.ref('online/'+n).set(true)},30000);st('欢迎, '+myName+'!')}
-document.getElementById('chat-input').addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage()}});
-function sendMessage(){if(!myName){sm('name-modal');return}var t=document.getElementById('chat-input').value.trim();if(!t)return;document.getElementById('chat-input').value='';db.ref('messages').push({name:myName,text:t,time:Date.now()})}
-db.ref('messages').orderByKey().limitToLast(200).on('child_added',function(s){var m=s.val();var el=document.getElementById('chat-msgs');var w=el.querySelector('.chat-welcome');if(w)w.remove();var self=m.name===myName;var d=document.createElement('div');d.className='msg-row '+(self?'msg-self':'msg-other');var t=m.time?new Date(m.time).toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'}):'';d.innerHTML='<div style="max-width:85%;"><div class="msg-meta">'+(self?'':'<span class="chat-name-tag">'+esc(m.name)+'</span>')+t+'</div><div class="msg-bubble">'+esc(m.text)+'</div></div>';el.appendChild(d);setTimeout(function(){el.scrollTop=el.scrollHeight},50)});
-db.ref('members').on('value',function(s){var ms=s.val()||{};curM=Object.keys(ms);var el=document.getElementById('members-list');if(curM.length===0){el.innerHTML='<div class="empty-state" style="padding:8px;"><p>还没有添加伙伴</p></div>';return}el.innerHTML=curM.map(function(n){return'<span class="member-tag">'+esc(n)+'<span class="remove" onclick="removeMember(\''+esc(n)+'\')">×</span></span>'}).join('')});
-db.ref('online').on('value',function(s){var ol=s.val()||{};var ns=Object.keys(ol);var el=document.getElementById('online-list');if(ns.length===0){el.innerHTML='<div class="empty-state" style="padding:8px;"><p>暂无在线成员</p></div>';return}el.innerHTML=ns.map(function(n){return'<span class="member-tag"><span class="online-dot"></span>'+esc(n)+'</span>'}).join('')});
-function addMember(){if(!myName){sm('name-modal');return}var i=document.getElementById('member-input');var n=i.value.trim();if(!n){st('请输入名字');return}db.ref('members/'+n).once('value',function(s){if(s.val()){st('该伙伴已存在');return}db.ref('members/'+n).set(true);i.value='';st('已添加 '+n)})}
-function removeMember(n){if(!confirm('确定移除 '+n+' 吗？'))return;db.ref('members/'+n).remove();db.ref('votes').once('value',function(s){var v=s.val()||{};Object.keys(v).forEach(function(p){if(v[p]&&v[p][n])db.ref('votes/'+p+'/'+n).remove()})})}
-db.ref('confirmedPlan').on('value',function(s){confirmedPlanId=s.val()});
-db.ref('plans').on('value',function(s){var plans=s.val()||{};var pids=Object.keys(plans);var el=document.getElementById('plans-list');if(pids.length===0){el.innerHTML='<div class="empty-state"><div class="icon">📭</div><p>还没有出行方案</p></div>';return}var h='';pids.forEach(function(pid){var p=plans[pid];h+='<div class="plan-item" id="plan-'+pid+'"><div class="plan-header"><div><div class="plan-name">'+esc(p.name)+(pid===confirmedPlanId?' <span class="winning-badge">🏆 最终方案</span>':'')+'</div><div class="plan-meta">'+(p.date?'📅 '+p.date+(p.dateEnd?' ~ '+p.dateEnd:'')+' ':'')+(p.dest?'📍 '+esc(p.dest):'')+'</div></div><div class="plan-actions" style="display:flex;gap:4px;flex-shrink:0;"><button class="btn btn-xs btn-outline" onclick="confirmPlan(\''+pid+'\')">✅</button><button class="btn btn-xs btn-outline" onclick="deletePlan(\''+pid+'\',\''+esc(p.name)+'\')">✕</button></div></div>'+(p.note?'<div class="plan-note">💡 '+esc(p.note)+'</div>':'')+'<div class="vote-group" id="vg-'+pid+'"><button class="vote-btn yes" onclick="vote(\''+pid+'\',\'yes\')">✅ 可以</button><button class="vote-btn maybe" onclick="vote(\''+pid+'\',\'maybe\')">🤔 再看看</button><button class="vote-btn no" onclick="vote(\''+pid+'\',\'no\')">❌ 不行</button></div><div class="summary-bar" id="sb-'+pid+'"></div><div class="vote-count" id="vc-'+pid+'"></div><div id="voters-'+pid+'"></div></div>'});
-el.innerHTML=h;pids.forEach(function(pid){db.ref('votes/'+pid).off();db.ref('votes/'+pid).on('value',function(s){uv(pid,s.val()||{})})})});
-function uv(pid,v){var t=curM.length||Object.keys(v).length||1;var y=0,m=0,n=0;Object.values(v).forEach(function(x){if(x==='yes')y++;else if(x==='maybe')m++;else if(x==='no')n++});
-var mv=v[myName]||'';document.querySelectorAll('#vg-'+pid+' .vote-btn').forEach(function(b){b.classList.remove('active');if((b.classList.contains('yes')&&mv==='yes')||(b.classList.contains('maybe')&&mv==='maybe')||(b.classList.contains('no')&&mv==='no'))b.classList.add('active')});
-var sb=document.getElementById('sb-'+pid);if(sb)sb.innerHTML=(y>0?'<div class="seg-yes" style="width:'+(y/t*100)+'%"></div>':'')+(m>0?'<div class="seg-maybe" style="width:'+(m/t*100)+'%"></div>':'')+(n>0?'<div class="seg-no" style="width:'+(n/t*100)+'%"></div>':'')+(y+m+n===0?'<div style="width:100%"></div>':'');
-var vc=document.getElementById('vc-'+pid);if(vc){var p=t>0?Math.round(y/t*100):0;vc.innerHTML='✅ '+y+' · 🤔 '+m+' · ❌ '+n+' · 共'+t+'人 · '+p+'%可去'}
-var ve=document.getElementById('voters-'+pid);if(ve)ve.innerHTML=Object.keys(v).map(function(n){var x=v[n];var c=x==='yes'?'p-yes':x==='maybe'?'p-maybe':'p-no';var i=x==='yes'?'✅':x==='maybe'?'🤔':'❌';return'<span class="person-badge '+c+'">'+i+' '+esc(n)+'</span>'}).join('')}
-function addPlan(){if(!myName){sm('name-modal');return}var n=document.getElementById('plan-name').value.trim();var d=document.getElementById('plan-date').value;var de=document.getElementById('plan-date-end').value;var ds=document.getElementById('plan-dest').value.trim();var nt=document.getElementById('plan-note').value.trim();if(!n){st('请填写方案名称');return}var r=db.ref('plans').push();r.set({name:n,date:d,dateEnd:de,dest:ds,note:nt,createdBy:myName,createdAt:Date.now()});db.ref('votes/'+r.key).set({});['plan-name','plan-date','plan-date-end','plan-dest','plan-note'].forEach(function(i){document.getElementById(i).value=''});cm('plan-modal');st('方案添加成功！')}
-function deletePlan(pid,pn){if(!confirm('确定删除「'+pn+'」吗？'))return;db.ref('plans/'+pid).remove();db.ref('votes/'+pid).remove();if(confirmedPlanId===pid)db.ref('confirmedPlan').set(null)}
-function vote(pid,v){if(!myName){sm('name-modal');return}var r=db.ref('votes/'+pid+'/'+myName);r.once('value',function(s){if(s.val()===v)r.remove();else r.set(v)})}
-function confirmPlan(pid){db.ref('confirmedPlan').set(pid);st('已标记为最终方案！');document.querySelectorAll('.tab-item').forEach(function(b){b.classList.remove('active')});document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active')});document.querySelector('.tab-item[data-page="itinerary"]').classList.add('active');document.getElementById('page-itinerary').classList.add('active')}
-var AI=[{name:'洛阳古都三日游',dest:'河南·洛阳',note:'龙门石窟+白马寺+洛邑古城+老君山，人均800-1200元',tags:['历史','文化']},{name:'云台山清凉三日游',dest:'河南·焦作',note:'红石峡+潭瀑峡+茱萸峰，夏季避暑，人均600-1000元',tags:['自然','避暑']},{name:'西安古都三日游',dest:'陕西·西安',note:'兵马俑+大唐不夜城+回民街，高铁直达，人均1200-1800元',tags:['历史','美食']},{name:'太行大峡谷三日游',dest:'河南·安阳',note:'太行大峡谷+红旗渠+殷墟，壮美山水，人均700-1100元',tags:['自然','人文']},{name:'青岛海滨三日游',dest:'山东·青岛',note:'栈桥+崂山+金沙滩+啤酒节，人均1500-2000元',tags:['海滨','美食']},{name:'开封东京梦华三日游',dest:'河南·开封',note:'清明上河园+开封府+大相国寺+夜市小吃，人均600-900元',tags:['文化','美食']},{name:'信阳南湾湖三日游',dest:'河南·信阳',note:'南湾湖+鸡公山+浉河夜市，品毛尖休闲慢游，人均500-800元',tags:['休闲','自然']},{name:'武汉江城三日游',dest:'湖北·武汉',note:'黄鹤楼+东湖+户部巷+长江大桥，人均800-1200元',tags:['美食','文化']},{name:'南京金陵三日游',dest:'江苏·南京',note:'中山陵+夫子庙+秦淮河+博物院，人均1000-1500元',tags:['历史','文化']},{name:'济南泉城三日游',dest:'山东·济南',note:'趵突泉+大明湖+千佛山+芙蓉街，人均700-1000元',tags:['休闲','自然']},{name:'长沙美食三日游',dest:'湖南·长沙',note:'橘子洲+岳麓山+茶颜悦色+文和友，人均1000-1400元',tags:['美食','网红']},{name:'黄山+宏村三日游',dest:'安徽·黄山',note:'黄山奇松+宏村古村落+屯溪老街，人均1500-2000元',tags:['自然','摄影']},{name:'万仙山+郭亮村三日游',dest:'河南·新乡',note:'万仙山+郭亮挂壁公路+八里沟，摄影徒步，人均600-900元',tags:['自然','摄影']},{name:'老君山+重渡沟三日游',dest:'河南·栾川',note:'老君山金顶+重渡沟竹林瀑布，避暑胜地，人均600-900元',tags:['自然','避暑']}];
-function aiRecommend(){if(!myName){sm('name-modal');return}sm('rec-modal');document.getElementById('rec-loading').style.display='block';document.getElementById('rec-results').style.display='none';setTimeout(function(){document.getElementById('rec-loading').style.display='none';document.getElementById('rec-results').style.display='block';var sh=[...AI].sort(function(){return Math.random()-0.5});var td=new Date();var df=(5-td.getDay()+7)%7||7;var sd=new Date(td);sd.setDate(td.getDate()+df);var picks=sh.slice(0,5).map(function(p,i){var s=new Date(sd);s.setDate(sd.getDate()+i*7);var e=new Date(s);e.setDate(e.getDate()+2);var f=function(d){return d.toISOString().slice(0,10)};return{name:p.name,date:f(s),dateEnd:f(e),dest:p.dest,note:p.note,tags:p.tags||[]}});document.getElementById('rec-list').innerHTML=picks.map(function(p,i){return'<div class="plan-item" style="cursor:pointer;"><div class="plan-header"><div><div class="plan-name">✨ '+esc(p.name)+'</div><div class="plan-meta">📅 '+p.date+' ~ '+p.dateEnd+' · 📍 '+esc(p.dest)+'</div></div><button class="btn btn-xs btn-primary" onclick="addRec('+i+')">＋添加</button></div><div class="plan-note" style="margin-top:6px;">'+esc(p.note)+'</div><div style="margin-top:4px;">'+(p.tags||[]).map(function(t){return'<span class="rec-tag">#'+t+'</span>'}).join(' ')+'</div></div>'}).join('');window._rp=picks},800)}
-function addRec(i){if(!window._rp||!window._rp[i])return;var p=window._rp[i];var r=db.ref('plans').push();r.set({name:p.name,date:p.date,dateEnd:p.dateEnd,dest:p.dest,note:p.note,createdBy:'🤖 智能推荐',createdAt:Date.now()});db.ref('votes/'+r.key).set({});st('已添加：'+p.name)}
-db.ref('plans').on('value',function(){rr()});
-function rr(){db.ref('plans').once('value',function(ps){var plans=ps.val()||{};var pids=Object.keys(plans);var mb=curM;var oe=document.getElementById('result-overview');var de=document.getElementById('result-detail');if(pids.length===0){oe.innerHTML='<div class="card empty-state"><div class="icon">📊</div><p>暂无数据</p></div>';de.innerHTML='';return}var ty=0,tm=0;var ps2={};var pe=pids.length;pids.forEach(function(pid){db.ref('votes/'+pid).once('value',function(vs){var v=vs.val()||{};var y=0,m=0,n=0;Object.values(v).forEach(function(x){if(x==='yes')y++;else if(x==='maybe')m++;else if(x==='no')n++});ty+=y;tm+=m;ps2[pid]={yes:y,maybe:m,no:n,votes:v};pe--;if(pe===0){oe.innerHTML='<div class="stat-row"><div class="stat-box purple"><div class="num">'+pids.length+'</div><div class="lbl">总方案</div></div><div class="stat-box green"><div class="num">'+ty+'</div><div class="lbl">✅ 总可去</div></div><div class="stat-box orange"><div class="num">'+tm+'</div><div class="lbl">🤔 再看看</div></div></div>';var s=pids.sort(function(a,b){return ps2[b].yes-ps2[a].yes||ps2[b].maybe-ps2[a].maybe});var h='<div class="card"><div class="card-title">📋 方案对比</div>';s.forEach(function(pid){var p=plans[pid];var st=ps2[pid];h+='<div class="plan-item'+(pid===confirmedPlanId?' confirmed':'')+'" style="margin-bottom:8px;"><div style="display:flex;justify-content:space-between;align-items:center;"><div class="plan-name">'+esc(p.name)+(pid===confirmedPlanId?' 🏆':'')+'</div><div style="font-size:12px;color:var(--text2);">✅ '+st.yes+' / 🤔 '+st.maybe+'</div></div><div class="summary-bar" style="margin:4px 0;">'+(st.yes>0?'<div class="seg-yes" style="width:'+(st.yes/(mb.length||1)*100)+'%"></div>':'')+(st.maybe>0?'<div class="seg-maybe" style="width:'+(st.maybe/(mb.length||1)*100)+'%"></div>':'')+(st.no>0?'<div class="seg-no" style="width:'+(st.no/(mb.length||1)*100)+'%"></div>':'')+'</div>';var vn=Object.keys(st.votes);if(vn.length>0){h+='<div>';vn.forEach(function(n){var x=st.votes[n];var ic=x==='yes'?'✅':x==='maybe'?'🤔':'❌';var cls=x==='yes'?'p-yes':x==='maybe'?'p-maybe':'p-no';h+='<span class="person-badge '+cls+'">'+ic+' '+esc(n)+'</span>'});h+='</div>'}h+='</div>'});h+='</div>';if(mb.length>0){h+='<div class="card"><div class="card-title">📋 成员意向矩阵</div><div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:12px;"><tr style="background:var(--gray-bg);"><th style="padding:5px 4px;text-align:left;">成员</th>';s.forEach(function(pid){h+='<th style="padding:5px 4px;text-align:center;">'+(plans[pid].name.length>5?plans[pid].name.slice(0,5)+'…':plans[pid].name)+'</th>'});h+='</tr>';mb.forEach(function(m){h+='<tr><td style="padding:5px 4px;font-weight:500;">'+esc(m)+'</td>';s.forEach(function(pid){var x=(ps2[pid]?.votes||{})[m];h+='<td style="padding:5px 4px;text-align:center;">'+(x==='yes'?'✅':x==='maybe'?'🤔':x==='no'?'❌':'—')+'</td>'});h+='</tr>'});h+='</table></div></div>'}de.innerHTML=h}})})}
-db.ref('itinerary').orderByChild('date').on('value',function(s){var days=s.val()||{};var el=document.getElementById('itinerary-list');var dids=Object.keys(days);if(dids.length===0){el.innerHTML='<div class="card empty-state"><div class="icon">🗓️</div><p>还没有行程安排</p></div>';return}var s2=dids.sort(function(a,b){return(days[a].date||'').localeCompare(days[b].date||'')});el.innerHTML=s2.map(function(did,idx){var d=days[did];var acts=d.activities?d.activities.split('\n').filter(function(l){return l.trim()}).map(function(line){var m=line.match(/^(\d{1,2}:\d{2})\s*(.*)/);if(m)return'<div class="activity-row"><div class="activity-time">'+m[1]+'</div><div>'+esc(m[2])+'</div></div>';return'<div class="activity-row"><div class="activity-time"></div><div>'+esc(line)+'</div></div>'}).join(''):'<div style="color:var(--text2);font-size:13px;">暂无安排</div>';return'<div class="card"><div style="display:flex;justify-content:space-between;align-items:flex-start;"><div class="day-item" style="border:none;padding:0;flex:1;"><div class="day-title">'+(d.date?'📅 '+d.date:'第'+(idx+1)+'天')+'</div><div style="font-weight:600;margin:4px 0 8px;">'+esc(d.title)+'</div>'+acts+'</div><button class="btn btn-xs btn-outline" onclick="deleteDay(\''+did+'\')">✕</button></div></div>'}).join('');el.innerHTML+='<div style="text-align:center;padding:8px 0;"><button class="btn btn-sm btn-outline" onclick="clrDay()">🗑️ 清空所有行程</button></div>'});
-function addDay(){if(!myName){sm('name-modal');return}var date=document.getElementById('day-date').value;var title=document.getElementById('day-title').value.trim();var acts=document.getElementById('day-activities').value.trim();if(!title){st('请填写标题');return}db.ref('itinerary').push({date:date,title:title,activities:acts,createdBy:myName,createdAt:Date.now()});document.getElementById('day-date').value='';document.getElementById('day-title').value='';document.getElementById('day-activities').value='';cm('day-modal');st('行程已添加！')}
-function deleteDay(did){if(!confirm('确定删除这一天吗？'))return;db.ref('itinerary/'+did).remove();st('已删除')}
-function clrDay(){if(!confirm('确定清空所有行程吗？'))return;db.ref('itinerary').remove();st('已清空')}
+
+// ====== Tab switching ======
+document.querySelectorAll('.ti').forEach(function(b){
+  b.addEventListener('click',function(){
+    document.querySelectorAll('.ti').forEach(function(x){x.classList.remove('act')});
+    document.querySelectorAll('.pg').forEach(function(x){x.classList.remove('act')});
+    this.classList.add('act');
+    document.getElementById('pg-'+this.dataset.p).classList.add('act');
+  });
+});
+
+// ====== Name ======
+function sn(){
+  var n=document.getElementById('ni').value.trim();
+  if(!n){toast('请输入名字');return}
+  myName=n;
+  localStorage.setItem('tn',n);
+  document.getElementById('nb').style.display='none';
+  if(fbReady){
+    db.ref('members').once('value',function(s){var ms=s.val()||{};if(!ms[n])db.ref('members/'+n).set(true)});
+    var or=db.ref('online/'+n);or.set(true);or.onDisconnect().remove();
+    setInterval(function(){db.ref('online/'+n).set(true)},30000);
+  } else {
+    localData.members[n]=true;
+    saveLocal();
+  }
+  toast('欢迎, '+n+'!');
+}
+
+if(!myName){
+  document.getElementById('nb').style.display='block';
+} else if(fbReady) {
+  var or=db.ref('online/'+myName);or.set(true);or.onDisconnect().remove();
+  setInterval(function(){db.ref('online/'+myName).set(true)},30000);
+}
+
+// ====== Chat ======
+document.getElementById('ci').addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sm()}});
+
+function sm(){
+  if(!myName){document.getElementById('nb').style.display='block';return}
+  var t=document.getElementById('ci').value.trim();
+  if(!t)return;
+  document.getElementById('ci').value='';
+  if(fbReady){
+    db.ref('messages').push({name:myName,text:t,time:Date.now()});
+  } else {
+    localData.messages.push({name:myName,text:t,time:Date.now()});
+    saveLocal();
+    renderLocalChat();
+  }
+}
+
+// ====== Init ======
+function initApp(){
+  if(fbReady){
+    // Firebase listeners
+    db.ref('messages').orderByKey().limitToLast(200).on('child_added',function(s){
+      var m=s.val();renderMsg(m);
+    });
+    db.ref('members').on('value',function(s){
+      var ms=s.val()||{};renderMembers(Object.keys(ms));
+    });
+    db.ref('online').on('value',function(s){var ol=s.val()||{};renderOnline(Object.keys(ol))});
+    db.ref('plans').on('value',function(s){renderPlans(s.val()||{})});
+    db.ref('confirmedPlan').on('value',function(s){window._cf=s.val()});
+    db.ref('itinerary').orderByChild('date').on('value',function(s){renderItin(s.val()||{})});
+    db.ref('plans').on('value',function(){renderResults()});
+  } else {
+    loadLocal();
+    // Render local data
+    localData.messages.forEach(function(m){renderMsg(m)});
+    renderMembers(Object.keys(localData.members||{}));
+    renderPlans(localData.plans||{});
+    renderItin(localData.itinerary||{});
+  }
+}
+
+function renderMsg(m){
+  var el=document.getElementById('chat');
+  var wc=el.querySelector('.wc');if(wc)wc.remove();
+  var self=m.name===myName;
+  var d=document.createElement('div');d.className='mr '+(self?'ms':'mo');
+  var t=m.time?new Date(m.time).toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'}):'';
+  d.innerHTML='<div style="max-width:85%;"><div class="mm">'+(self?'':'<span class="nt">'+esc(m.name)+'</span>')+t+'</div><div class="bb">'+esc(m.text)+'</div></div>';
+  el.appendChild(d);
+  setTimeout(function(){el.scrollTop=el.scrollHeight},50);
+}
+
+function renderMembers(ms){
+  var el=document.getElementById('ml');
+  if(ms.length===0){el.innerHTML='<div class="em" style="padding:8px"><p>还没有添加伙伴</p></div>';return}
+  el.innerHTML=ms.map(function(n){return'<span class="mt">'+esc(n)+'<span class="rm" onclick="rm2(\''+esc(n)+'\')">×</span></span>'}).join('');
+  window._mem=ms;
+}
+
+function renderOnline(ns){
+  var el=document.getElementById('ol');
+  if(ns.length===0){el.innerHTML='<div class="em" style="padding:8px"><p>暂无在线成员</p></div>';return}
+  el.innerHTML=ns.map(function(n){return'<span class="mt"><span class="od"></span>'+esc(n)+'</span>'}).join('');
+}
+
+function am(){
+  if(!myName){document.getElementById('nb').style.display='block';return}
+  var i=document.getElementById('mi');var n=i.value.trim();
+  if(!n){toast('请输入名字');return}
+  if(fbReady){
+    db.ref('members/'+n).once('value',function(s){if(s.val()){toast('该伙伴已存在');return}db.ref('members/'+n).set(true);i.value='';toast('已添加 '+n)});
+  } else {
+    if(localData.members[n]){toast('该伙伴已存在');return}
+    localData.members[n]=true;saveLocal();i.value='';toast('已添加 '+n);renderMembers(Object.keys(localData.members));
+  }
+}
+
+function rm2(n){
+  if(!confirm('确定移除 '+n+' 吗？'))return;
+  if(fbReady){
+    db.ref('members/'+n).remove();
+  } else {
+    delete localData.members[n];saveLocal();renderMembers(Object.keys(localData.members));
+  }
+}
+
+// ====== Plans ======
+function ap(){
+  if(!myName){document.getElementById('nb').style.display='block';return}
+  var n=document.getElementById('pn').value.trim();var d=document.getElementById('pd').value;var de=document.getElementById('pde').value;var ds=document.getElementById('pdest').value.trim();var nt=document.getElementById('pnote').value.trim();
+  if(!n){toast('请填写方案名称');return}
+  var data={name:n,date:d,dateEnd:de,dest:ds,note:nt,createdBy:myName,createdAt:Date.now()};
+  if(fbReady){
+    var r=db.ref('plans').push();r.set(data);db.ref('votes/'+r.key).set({});
+  } else {
+    var id='p'+Date.now();localData.plans[id]=data;localData.votes=localData.votes||{};localData.votes[id]={};saveLocal();renderPlans(localData.plans);
+  }
+  ['pn','pd','pde','pdest','pnote'].forEach(function(i){document.getElementById(i).value=''});h('pm');toast('方案添加成功！');
+}
+
+function v(pid,vl){
+  if(!myName){document.getElementById('nb').style.display='block';return}
+  if(fbReady){
+    var r=db.ref('votes/'+pid+'/'+myName);
+    r.once('value',function(s){if(s.val()===vl)r.remove();else r.set(vl)});
+  } else {
+    localData.votes=localData.votes||{};localData.votes[pid]=localData.votes[pid]||{};
+    if(localData.votes[pid][myName]===vl)delete localData.votes[pid][myName];
+    else localData.votes[pid][myName]=vl;
+    saveLocal();renderPlans(localData.plans);
+  }
+}
+
+function dp(pid,pn){
+  if(!confirm('确定删除「'+pn+'」吗？'))return;
+  if(fbReady){db.ref('plans/'+pid).remove();db.ref('votes/'+pid).remove()}else{delete localData.plans[pid];delete localData.votes[pid];saveLocal();renderPlans(localData.plans)}
+}
+
+function cp(pid){
+  if(fbReady){db.ref('confirmedPlan').set(pid)}else{window._cf=pid;saveLocal()}
+  toast('已标记为最终方案！');
+  document.querySelectorAll('.ti').forEach(function(b){b.classList.remove('act')});
+  document.querySelectorAll('.pg').forEach(function(p){p.classList.remove('act')});
+  document.querySelector('.ti[data-p="itin"]').classList.add('act');
+  document.getElementById('pg-itin').classList.add('act');
+}
+
+function renderPlans(plans){
+  var el=document.getElementById('pl');var pids=Object.keys(plans);
+  if(pids.length===0){el.innerHTML='<div class="em"><div class="ic2">📭</div><p>还没有出行方案</p></div>';return}
+  var h='';var _cf=window._cf||null;
+  pids.forEach(function(pid){
+    var p=plans[pid];var vs=(fbReady?{}:(localData.votes||{})[pid])||{};
+    h+='<div class="pl" id="pl-'+pid+'"><div class="ph"><div><div class="pn">'+esc(p.name)+(pid===_cf?' <span class="wb">🏆 最终方案</span>':'')+'</div><div class="pm">'+(p.date?'📅 '+p.date+(p.dateEnd?' ~ '+p.dateEnd:'')+' ':'')+(p.dest?'📍 '+esc(p.dest):'')+'</div></div><div style="display:flex;gap:4px;flex-shrink:0;"><button class="btn btn-xs btn-o" onclick="cp(\''+pid+'\')">✅</button><button class="btn btn-xs btn-o" onclick="dp(\''+pid+'\',\''+esc(p.name)+'\')">✕</button></div></div>'+(p.note?'<div class="pno">💡 '+esc(p.note)+'</div>':'')+'<div class="vg" id="vg-'+pid+'"><button class="vb y" onclick="v(\''+pid+'\',\'yes\')">✅ 可以</button><button class="vb m" onclick="v(\''+pid+'\',\'maybe\')">🤔 再看看</button><button class="vb n" onclick="v(\''+pid+'\',\'no\')">❌ 不行</button></div><div class="sb" id="sb-'+pid+'"></div><div class="vc" id="vc-'+pid+'"></div><div id="vr-'+pid+'"></div></div>';
+  });
+  el.innerHTML=h;
+  // Update votes (for local mode)
+  if(!fbReady&&localData.votes){
+    pids.forEach(function(pid){updateVoteUI2(pid,(localData.votes||{})[pid]||{})});
+  }
+}
+
+function updateVoteUI2(pid,vs){
+  var mem=window._mem||[];var t=mem.length||1;var y=0,m=0,n=0;
+  Object.values(vs).forEach(function(x){if(x==='yes')y++;else if(x==='maybe')m++;else if(x==='no')n++});
+  var mv=vs[myName]||'';
+  document.querySelectorAll('#vg-'+pid+' .vb').forEach(function(b){
+    b.classList.remove('act');
+    if((b.classList.contains('y')&&mv==='yes')||(b.classList.contains('m')&&mv==='maybe')||(b.classList.contains('n')&&mv==='no'))b.classList.add('act');
+  });
+  var sb=document.getElementById('sb-'+pid);if(sb)sb.innerHTML=(y>0?'<div class="sy" style="width:'+(y/t*100)+'%"></div>':'')+(m>0?'<div class="sm" style="width:'+(m/t*100)+'%"></div>':'')+(n>0?'<div class="sn" style="width:'+(n/t*100)+'%"></div>':'')+(y+m+n===0?'<div style="width:100%"></div>':'');
+  var vc=document.getElementById('vc-'+pid);if(vc){var p=t>0?Math.round(y/t*100):0;vc.innerHTML='✅ '+y+' · 🤔 '+m+' · ❌ '+n+' · 共'+t+'人 · '+p+'%可去'}
+  var vr=document.getElementById('vr-'+pid);if(vr)vr.innerHTML=Object.keys(vs).map(function(nm){var x=vs[nm];var c=x==='yes'?'py':x==='maybe'?'pm2':'pn2';var i=x==='yes'?'✅':x==='maybe'?'🤔':'❌';return'<span class="pb '+c+'">'+i+' '+esc(nm)+'</span>'}).join('');
+}
+
+// Listen votes in Firebase mode
+if(fbReady){
+  // This would be attached when plans load
+  var _voteListeners={};
+  db.ref('plans').on('value',function(s){
+    var plans=s.val()||{};
+    Object.keys(plans).forEach(function(pid){
+      if(!_voteListeners[pid]){
+        _voteListeners[pid]=true;
+        db.ref('votes/'+pid).on('value',function(vs){updateVoteUI2(pid,vs.val()||{})});
+      }
+    });
+    renderPlans(plans);
+  });
+}
+
+// ====== AI Recommendations ======
+var AI_PLANS=[
+  {n:'洛阳古都三日游',d:'河南·洛阳',nt:'龙门石窟+白马寺+洛邑古城+老君山，人均800-1200元',tg:['历史','文化']},
+  {n:'云台山清凉三日游',d:'河南·焦作',nt:'红石峡+潭瀑峡+茱萸峰，夏季避暑，人均600-1000元',tg:['自然','避暑']},
+  {n:'西安古都三日游',d:'陕西·西安',nt:'兵马俑+大唐不夜城+回民街，高铁直达，人均1200-1800元',tg:['历史','美食']},
+  {n:'太行大峡谷三日游',d:'河南·安阳',nt:'太行大峡谷+红旗渠+殷墟，壮美山水，人均700-1100元',tg:['自然','人文']},
+  {n:'青岛海滨三日游',d:'山东·青岛',nt:'栈桥+崂山+金沙滩+啤酒节，人均1500-2000元',tg:['海滨','美食']},
+  {n:'开封东京梦华三日游',d:'河南·开封',nt:'清明上河园+开封府+大相国寺+夜市小吃，人均600-900元',tg:['文化','美食']},
+  {n:'信阳南湾湖三日游',d:'河南·信阳',nt:'南湾湖+鸡公山+浉河夜市，品毛尖休闲慢游，人均500-800元',tg:['休闲','自然']},
+  {n:'武汉江城三日游',d:'湖北·武汉',nt:'黄鹤楼+东湖+户部巷+长江大桥，人均800-1200元',tg:['美食','文化']},
+  {n:'南京金陵三日游',d:'江苏·南京',nt:'中山陵+夫子庙+秦淮河+博物院，人均1000-1500元',tg:['历史','文化']},
+  {n:'济南泉城三日游',d:'山东·济南',nt:'趵突泉+大明湖+千佛山+芙蓉街，人均700-1000元',tg:['休闲','自然']},
+  {n:'长沙美食三日游',d:'湖南·长沙',nt:'橘子洲+岳麓山+茶颜悦色+文和友，人均1000-1400元',tg:['美食','网红']},
+  {n:'黄山+宏村三日游',d:'安徽·黄山',nt:'黄山奇松+宏村古村落+屯溪老街，人均1500-2000元',tg:['自然','摄影']},
+  {n:'万仙山+郭亮村三日游',d:'河南·新乡',nt:'万仙山+郭亮挂壁公路+八里沟，摄影徒步，人均600-900元',tg:['自然','摄影']},
+  {n:'老君山+重渡沟三日游',d:'河南·栾川',nt:'老君山金顶+重渡沟竹林瀑布，避暑胜地，人均600-900元',tg:['自然','避暑']}
+];
+
+function ar(){
+  sh('rm');document.getElementById('rl').style.display='block';document.getElementById('rr').style.display='none';
+  setTimeout(function(){
+    document.getElementById('rl').style.display='none';document.getElementById('rr').style.display='block';
+    var shuf=[...AI_PLANS].sort(function(){return Math.random()-0.5});
+    var td=new Date();var df=(5-td.getDay()+7)%7||7;var sd=new Date(td);sd.setDate(td.getDate()+df);
+    var picks=shuf.slice(0,5).map(function(p,i){
+      var s=new Date(sd);s.setDate(sd.getDate()+i*7);var e=new Date(s);e.setDate(e.getDate()+2);
+      var f=function(d){return d.toISOString().slice(0,10)};
+      return{n:p.n,d:f(s),e:f(e),dst:p.d,nte:p.nt,tg:p.tg||[]};
+    });
+    document.getElementById('rcl').innerHTML=picks.map(function(p,i){
+      return'<div class="pl" style="cursor:pointer"><div class="ph"><div><div class="pn">✨ '+esc(p.n)+'</div><div class="pm">📅 '+p.d+' ~ '+p.e+' · 📍 '+esc(p.dst)+'</div></div><button class="btn btn-xs btn-p" onclick="addR('+i+')">＋添加</button></div><div class="pno" style="margin-top:6px;">'+esc(p.nte)+'</div><div style="margin-top:4px;">'+(p.tg||[]).map(function(t){return'<span class="rt">#'+t+'</span>'}).join(' ')+'</div></div>'
+    }).join('');
+    window._rp=picks;
+  },600);
+}
+
+function addR(i){
+  if(!window._rp||!window._rp[i])return;
+  var p=window._rp[i];var data={name:p.n,date:p.d,dateEnd:p.e,dest:p.dst,note:p.nte,createdBy:'🤖 智能推荐',createdAt:Date.now()};
+  if(fbReady){var r=db.ref('plans').push();r.set(data);db.ref('votes/'+r.key).set({})}
+  else{var id='p'+Date.now();localData.plans[id]=data;localData.votes=localData.votes||{};localData.votes[id]={};saveLocal();renderPlans(localData.plans)}
+  toast('已添加：'+p.n);
+}
+
+// ====== Results ======
+function renderResults(){
+  if(!fbReady)return;
+  // Handled by Firebase listener
+}
+db.ref('plans').on('value',function(){if(!fbReady)return;
+  db.ref('plans').once('value',function(ps){
+    var plans=ps.val()||{};var pids=Object.keys(plans);var mem=window._mem||[];
+    var oe=document.getElementById('ro');var de=document.getElementById('rd');
+    if(pids.length===0){oe.innerHTML='<div class="cd em"><div class="ic2">📊</div><p>暂无数据</p></div>';de.innerHTML='';return}
+    var ty=0,tm=0;var pst={};var pe=pids.length;
+    pids.forEach(function(pid){
+      db.ref('votes/'+pid).once('value',function(vs){
+        var v=vs.val()||{};var y=0,m=0,n=0;Object.values(v).forEach(function(x){if(x==='yes')y++;else if(x==='maybe')m++;else if(x==='no')n++});
+        ty+=y;tm+=m;pst[pid]={yes:y,maybe:m,no:n,votes:v};pe--;if(pe===0)ri();
+      });
+    });
+    function ri(){
+      oe.innerHTML='<div class="sr"><div class="sb2 p"><div class="num">'+pids.length+'</div><div class="lbl">总方案</div></div><div class="sb2 g"><div class="num">'+ty+'</div><div class="lbl">✅ 总可去</div></div><div class="sb2 o"><div class="num">'+tm+'</div><div class="lbl">🤔 再看看</div></div></div>';
+      var s=pids.sort(function(a,b){return pst[b].yes-pst[a].yes||pst[b].maybe-pst[a].maybe});
+      var _cf=window._cf||null;
+      var h='<div class="cd"><div class="ct">📋 方案对比</div>';
+      s.forEach(function(pid){var p=plans[pid];var st=pst[pid];h+='<div class="pl'+(_cf===pid?'" style="border-color:var(--g);background:var(--gb);"':'')+'" style="margin-bottom:8px;"><div style="display:flex;justify-content:space-between;align-items:center;"><div class="pn">'+esc(p.name)+(_cf===pid?' 🏆':'')+'</div><div style="font-size:12px;color:var(--t2);">✅ '+st.yes+' / 🤔 '+st.maybe+'</div></div><div class="sb" style="margin:4px 0;">'+(st.yes>0?'<div class="sy" style="width:'+(st.yes/(mem.length||1)*100)+'%"></div>':'')+(st.maybe>0?'<div class="sm" style="width:'+(st.maybe/(mem.length||1)*100)+'%"></div>':'')+(st.no>0?'<div class="sn" style="width:'+(st.no/(mem.length||1)*100)+'%"></div>':'')+'</div>';
+        var vn=Object.keys(st.votes);if(vn.length>0){h+='<div>';vn.forEach(function(nm){var x=st.votes[nm];var ic=x==='yes'?'✅':x==='maybe'?'🤔':'❌';var cl=x==='yes'?'py':x==='maybe'?'pm2':'pn2';h+='<span class="pb '+cl+'">'+ic+' '+esc(nm)+'</span>'});h+='</div>'}h+='</div>'});
+      h+='</div>';
+      if(mem.length>0){h+='<div class="cd"><div class="ct">📋 成员意向矩阵</div><div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:12px;"><tr style="background:var(--kb);"><th style="padding:5px 4px;text-align:left;">成员</th>';s.forEach(function(pid){h+='<th style="padding:5px 4px;text-align:center;">'+(plans[pid].name.length>5?plans[pid].name.slice(0,5)+'…':plans[pid].name)+'</th>'});h+='</tr>';mem.forEach(function(m){h+='<tr><td style="padding:5px 4px;font-weight:500;">'+esc(m)+'</td>';s.forEach(function(pid){var x=(pst[pid]?.votes||{})[m];h+='<td style="padding:5px 4px;text-align:center;">'+(x==='yes'?'✅':x==='maybe'?'🤔':x==='no'?'❌':'—')+'</td>'});h+='</tr>'});h+='</table></div></div>'}
+      de.innerHTML=h;
+    }
+  });
+});
+
+// ====== Itinerary ======
+function ad(){
+  if(!myName){document.getElementById('nb').style.display='block';return}
+  var date=document.getElementById('dd').value;var title=document.getElementById('dt').value.trim();var acts=document.getElementById('da').value.trim();
+  if(!title){toast('请填写标题');return}
+  var data={date:date,title:title,activities:acts,createdBy:myName,createdAt:Date.now()};
+  if(fbReady){db.ref('itinerary').push(data)}else{var id='d'+Date.now();localData.itinerary[id]=data;saveLocal();renderItin(localData.itinerary)}
+  document.getElementById('dd').value='';document.getElementById('dt').value='';document.getElementById('da').value='';h('dm');toast('行程已添加！');
+}
+
+function renderItin(days){
+  var el=document.getElementById('il');var dids=Object.keys(days);
+  if(dids.length===0){el.innerHTML='<div class="cd em"><div class="ic2">🗓️</div><p>还没有行程安排</p></div>';return}
+  var s=dids.sort(function(a,b){return(days[a].date||'').localeCompare(days[b].date||'')});
+  el.innerHTML=s.map(function(did,idx){var d=days[did];var acts=d.activities?d.activities.split('\n').filter(function(l){return l.trim()}).map(function(line){var m=line.match(/^(\d{1,2}:\d{2})\s*(.*)/);if(m)return'<div class="ar"><div class="at">'+m[1]+'</div><div>'+esc(m[2])+'</div></div>';return'<div class="ar"><div class="at"></div><div>'+esc(line)+'</div></div>'}).join(''):'<div style="color:var(--t2);font-size:13px;">暂无安排</div>';return'<div class="cd"><div style="display:flex;justify-content:space-between;align-items:flex-start;"><div class="di" style="border:none;padding:0;flex:1;"><div class="dt2">'+(d.date?'📅 '+d.date:'第'+(idx+1)+'天')+'</div><div style="font-weight:600;margin:4px 0 8px;">'+esc(d.title)+'</div>'+acts+'</div><button class="btn btn-xs btn-o" onclick="dd2(\''+did+'\')">✕</button></div></div>'}).join('');
+  el.innerHTML+='<div style="text-align:center;padding:8px 0;"><button class="btn btn-sm btn-o" onclick="cd2()">🗑️ 清空所有行程</button></div>';
+}
+
+function dd2(did){if(!confirm('确定删除这一天吗？'))return;if(fbReady){db.ref('itinerary/'+did).remove()}else{delete localData.itinerary[did];saveLocal();renderItin(localData.itinerary)}toast('已删除')}
+function cd2(){if(!confirm('确定清空所有行程吗？'))return;if(fbReady){db.ref('itinerary').remove()}else{localData.itinerary={};saveLocal();renderItin({})}toast('已清空')}
+
+// If Firebase not loaded yet, init with offline mode after timeout
+setTimeout(function(){if(!fbReady&&!offlineMode){offlineMode=true;initApp()}},5000);
 </script>
 </body>
 </html>
