@@ -4,115 +4,85 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>旅行计划 - 实时协作</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="旅行计划">
+<meta name="theme-color" content="#5B7FFF">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; background: #f5f6fa; color: #1c1c1e; padding: 0; }
-  .loading { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; text-align: center; padding: 20px; }
-  .loading .spinner { width: 40px; height: 40px; border: 4px solid #e5e7eb; border-top-color: #5b7fff; border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 16px; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .loading p { color: #6b7280; font-size: 14px; margin-top: 8px; }
-  .loading .title { font-size: 20px; font-weight: 700; color: #5b7fff; margin-bottom: 8px; }
-  .error { display: none; flex-direction: column; align-items: center; justify-content: center; height: 100vh; text-align: center; padding: 20px; }
-  .error .icon { font-size: 48px; margin-bottom: 12px; }
-  .error h2 { color: #1c1c1e; margin-bottom: 8px; }
-  .error p { color: #6b7280; font-size: 14px; margin-bottom: 16px; }
-  .btn { display: inline-flex; align-items: center; justify-content: center; padding: 10px 24px; border: none; border-radius: 10px; font-size: 15px; font-weight: 500; background: #5b7fff; color: #fff; cursor: pointer; font-family: inherit; text-decoration: none; }
-  .btn:active { opacity: 0.8; }
-</style>
-</head>
-<body>
-  <div class="loading" id="loading">
-    <div class="spinner"></div>
-    <div class="title">🗺️ 旅行计划</div>
-    <p>正在加载应用...</p>
-  </div>
-  <div class="error" id="error">
-    <div class="icon">😅</div>
-    <h2>加载失败</h2>
-    <p>请检查网络后刷新页面重试</p>
-    <button class="btn" onclick="location.reload()">刷新重试</button>
-  </div>
-
-  <!-- Load Firebase via CDN -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-  <script>
-  // Firebase config
-  const firebaseConfig = {
-    apiKey: "AIzaSyBMdduAkyVSdvz3sXtlB3jAW7L_yhin2VQ",
-    authDomain: "travel-planner-2b162.firebaseapp.com",
-    databaseURL: "https://travel-planner-2b162-default-rtdb.firebaseio.com",
-    projectId: "travel-planner-2b162",
-    storageBucket: "travel-planner-2b162.firebasestorage.app",
-    messagingSenderId: "20555551861",
-    appId: "1:20555551861:web:375a0d4cd15363f7da143c"
-  };
-  firebase.initializeApp(firebaseConfig);
-  window._firebaseDB = firebase.database();
-
-  // Load the app from jsDelivr CDN
-  var xhr = new XMLHttpRequest();
-  xhr.open('GET', 'https://cdn.jsdelivr.net/gh/xianglaile-maker/travel-planner@main/index.html', true);
-  xhr.onload = function() {
-    if (xhr.status === 200) {
-      var html = xhr.responseText;
-      // Remove the original HTML head/body - keep only the content
-      var parser = new DOMParser();
-      var doc = parser.parseFromString(html, 'text/html');
-      
-      // Merge styles
-      var styles = doc.querySelectorAll('style');
-      styles.forEach(function(s) {
-        document.head.appendChild(s.cloneNode(true));
-      });
-      
-      // Merge meta tags
-      var metas = doc.querySelectorAll('meta');
-      metas.forEach(function(m) {
-        if (!m.getAttribute('charset')) {
-          document.head.appendChild(m.cloneNode(true));
-        }
-      });
-      
-      // Replace body content
-      var newBody = doc.querySelector('body');
-      if (newBody) {
-        document.body.innerHTML = newBody.innerHTML;
-      }
-      
-      // Execute scripts
-      var scripts = doc.querySelectorAll('script');
-      scripts.forEach(function(oldScript) {
-        if (oldScript.src) {
-          var newScript = document.createElement('script');
-          newScript.src = oldScript.src;
-          document.body.appendChild(newScript);
-        } else if (oldScript.textContent.trim()) {
-          var newScript = document.createElement('script');
-          newScript.textContent = oldScript.textContent;
-          document.body.appendChild(newScript);
-        }
-      });
-
-      // Inject Firebase DB reference into the app's scope
-      setTimeout(function() {
-        if (typeof db === 'undefined' && window._firebaseDB) {
-          window.db = window._firebaseDB;
-        }
-        // Remove loading
-        var loadingEl = document.getElementById('loading');
-        if (loadingEl) loadingEl.style.display = 'none';
-      }, 500);
-    } else {
-      document.getElementById('loading').style.display = 'none';
-      document.getElementById('error').style.display = 'flex';
-    }
-  };
-  xhr.onerror = function() {
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('error').style.display = 'flex';
-  };
-  xhr.send();
-  </script>
-</body>
-</html>
+  :root {
+    --primary: #5B7FFF; --primary-dark: #3D5CD9; --primary-light: #E8EDFF;
+    --green: #34C759; --green-bg: #E8F8ED;
+    --orange: #FF9500; --orange-bg: #FFF4E5;
+    --red: #FF3B30; --red-bg: #FFEDEC;
+    --gray: #8E8E93; --gray-bg: #F2F2F7;
+    --bg: #F5F6FA; --card: #FFFFFF;
+    --text: #1C1C1E; --text2: #6B7280;
+    --border: #E5E7EB;
+    --radius: 14px; --radius-sm: 10px;
+    --shadow: 0 2px 12px rgba(0,0,0,0.06);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --tab-height: 56px;
+  }
+  html, body { height: 100%; overflow: hidden; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg); color: var(--text);
+    -webkit-tap-highlight-color: transparent;
+    display: flex; flex-direction: column; height: 100vh; height: 100dvh;
+  }
+  .header {
+    background: linear-gradient(135deg, #5B7FFF 0%, #7C5CFC 100%);
+    color: #fff; padding: 14px 16px 12px; text-align: center;
+    flex-shrink: 0; position: relative;
+    padding-top: max(14px, env(safe-area-inset-top, 14px));
+  }
+  .header h1 { font-size: 18px; font-weight: 700; }
+  .header .sub { font-size: 12px; opacity: 0.8; margin-top: 1px; }
+  .main { flex: 1; overflow: hidden; position: relative; }
+  .page { display: none; height: 100%; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .page.active { display: flex; flex-direction: column; }
+  .tabbar {
+    display: flex; background: var(--card); border-top: 1px solid var(--border);
+    flex-shrink: 0; padding-bottom: var(--safe-bottom);
+    height: calc(var(--tab-height) + var(--safe-bottom));
+  }
+  .tab-item {
+    flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    border: none; background: none; font-size: 10px; color: var(--gray); cursor: pointer;
+    padding: 4px 0; gap: 1px; transition: color 0.15s; font-family: inherit;
+  }
+  .tab-item .tab-icon { font-size: 22px; line-height: 1.2; }
+  .tab-item.active { color: var(--primary); }
+  .tab-item:active { opacity: 0.6; }
+  .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px; margin-bottom: 10px; }
+  .page-inner { padding: 12px; max-width: 600px; margin: 0 auto; width: 100%; flex: 1; overflow-y: auto; }
+  .card-title { font-size: 15px; font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 4px;
+    padding: 10px 18px; border: none; border-radius: var(--radius-sm);
+    font-size: 14px; font-weight: 500; font-family: inherit; cursor: pointer;
+    transition: all 0.15s; white-space: nowrap; }
+  .btn:active { transform: scale(0.97); opacity: 0.8; }
+  .btn-primary { background: var(--primary); color: #fff; }
+  .btn-outline { background: none; border: 1.5px solid var(--border); color: var(--text2); }
+  .btn-sm { padding: 6px 12px; font-size: 12px; }
+  .btn-xs { padding: 4px 10px; font-size: 11px; border-radius: 8px; }
+  .btn-block { width: 100%; }
+  .input-group { margin-bottom: 10px; }
+  .input-group label { display: block; font-size: 12px; font-weight: 500; color: var(--text2); margin-bottom: 3px; }
+  input, textarea, select {
+    width: 100%; padding: 10px 12px; border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm); font-size: 15px; font-family: inherit;
+    background: var(--bg); color: var(--text); outline: none; transition: border-color 0.2s; }
+  input:focus, textarea:focus { border-color: var(--primary); background: #fff; }
+  textarea { resize: vertical; min-height: 50px; }
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 200; align-items: flex-end; justify-content: center; }
+  .modal-overlay.show { display: flex; }
+  .modal-content { background: var(--card); border-radius: var(--radius) var(--radius) 0 0; padding: 20px 16px; width: 100%; max-width: 500px; max-height: 85vh; overflow-y: auto; animation: slideUp 0.2s ease; padding-bottom: max(20px, var(--safe-bottom)); }
+  @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+  .modal-handle { width: 36px; height: 4px; background: #D1D5DB; border-radius: 2px; margin: 0 auto 14px; }
+  .modal-title { font-size: 17px; font-weight: 600; margin-bottom: 14px; }
+  .modal-actions { display: flex; gap: 8px; margin-top: 14px; }
+  .modal-actions .btn { flex: 1; }
+  #page-chat { padding: 0; }
+  .chat-msgs { f
