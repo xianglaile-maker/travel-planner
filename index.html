@@ -4,603 +4,115 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>旅行计划 - 实时协作</title>
-<link rel="manifest" href="manifest.json">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="旅行计划">
-<meta name="theme-color" content="#5B7FFF">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  :root {
-    --primary: #5B7FFF; --primary-dark: #3D5CD9; --primary-light: #E8EDFF;
-    --green: #34C759; --green-bg: #E8F8ED;
-    --orange: #FF9500; --orange-bg: #FFF4E5;
-    --red: #FF3B30; --red-bg: #FFEDEC;
-    --gray: #8E8E93; --gray-bg: #F2F2F7;
-    --bg: #F5F6FA; --card: #FFFFFF;
-    --text: #1C1C1E; --text2: #6B7280;
-    --border: #E5E7EB;
-    --radius: 14px; --radius-sm: 10px;
-    --shadow: 0 2px 12px rgba(0,0,0,0.06);
-    --safe-bottom: env(safe-area-inset-bottom, 0px);
-    --tab-height: 56px;
-  }
-  html, body { height: 100%; overflow: hidden; }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-    background: var(--bg); color: var(--text);
-    -webkit-tap-highlight-color: transparent;
-    display: flex; flex-direction: column; height: 100vh; height: 100dvh;
-  }
-  .header {
-    background: linear-gradient(135deg, #5B7FFF 0%, #7C5CFC 100%);
-    color: #fff; padding: 14px 16px 12px; text-align: center;
-    flex-shrink: 0; position: relative;
-    padding-top: max(14px, env(safe-area-inset-top, 14px));
-  }
-  .header h1 { font-size: 18px; font-weight: 700; }
-  .header .sub { font-size: 12px; opacity: 0.8; margin-top: 1px; }
-  .main { flex: 1; overflow: hidden; position: relative; }
-  .page { display: none; height: 100%; overflow-y: auto; -webkit-overflow-scrolling: touch; }
-  .page.active { display: flex; flex-direction: column; }
-  .tabbar {
-    display: flex; background: var(--card); border-top: 1px solid var(--border);
-    flex-shrink: 0; padding-bottom: var(--safe-bottom);
-    height: calc(var(--tab-height) + var(--safe-bottom));
-  }
-  .tab-item {
-    flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
-    border: none; background: none; font-size: 10px; color: var(--gray); cursor: pointer;
-    padding: 4px 0; gap: 1px; transition: color 0.15s; font-family: inherit;
-  }
-  .tab-item .tab-icon { font-size: 22px; line-height: 1.2; }
-  .tab-item.active { color: var(--primary); }
-  .tab-item:active { opacity: 0.6; }
-  .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px; margin-bottom: 10px; }
-  .page-inner { padding: 12px; max-width: 600px; margin: 0 auto; width: 100%; flex: 1; overflow-y: auto; }
-  .card-title { font-size: 15px; font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
-  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 4px;
-    padding: 10px 18px; border: none; border-radius: var(--radius-sm);
-    font-size: 14px; font-weight: 500; font-family: inherit; cursor: pointer;
-    transition: all 0.15s; white-space: nowrap; }
-  .btn:active { transform: scale(0.97); opacity: 0.8; }
-  .btn-primary { background: var(--primary); color: #fff; }
-  .btn-outline { background: none; border: 1.5px solid var(--border); color: var(--text2); }
-  .btn-sm { padding: 6px 12px; font-size: 12px; }
-  .btn-xs { padding: 4px 10px; font-size: 11px; border-radius: 8px; }
-  .btn-block { width: 100%; }
-  .btn-ghost { background: none; border: none; color: var(--text2); cursor: pointer; padding: 4px; }
-  .btn-ghost:active { opacity: 0.5; }
-  .input-group { margin-bottom: 10px; }
-  .input-group label { display: block; font-size: 12px; font-weight: 500; color: var(--text2); margin-bottom: 3px; }
-  input, textarea, select {
-    width: 100%; padding: 10px 12px; border: 1.5px solid var(--border);
-    border-radius: var(--radius-sm); font-size: 15px; font-family: inherit;
-    background: var(--bg); color: var(--text); outline: none; transition: border-color 0.2s; }
-  input:focus, textarea:focus { border-color: var(--primary); background: #fff; }
-  textarea { resize: vertical; min-height: 50px; }
-
-  /* Modal */
-  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 200; align-items: flex-end; justify-content: center; }
-  .modal-overlay.show { display: flex; }
-  .modal-content { background: var(--card); border-radius: var(--radius) var(--radius) 0 0; padding: 20px 16px; width: 100%; max-width: 500px; max-height: 85vh; overflow-y: auto; animation: slideUp 0.2s ease; padding-bottom: max(20px, var(--safe-bottom)); }
-  @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-  .modal-handle { width: 36px; height: 4px; background: #D1D5DB; border-radius: 2px; margin: 0 auto 14px; }
-  .modal-title { font-size: 17px; font-weight: 600; margin-bottom: 14px; }
-  .modal-actions { display: flex; gap: 8px; margin-top: 14px; }
-  .modal-actions .btn { flex: 1; }
-
-  /* Chat */
-  #page-chat { padding: 0; }
-  .chat-msgs { flex: 1; overflow-y: auto; padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; -webkit-overflow-scrolling: touch; }
-  .chat-input-area { display: flex; gap: 8px; padding: 8px 12px; background: var(--card); border-top: 1px solid var(--border); flex-shrink: 0; padding-bottom: max(8px, var(--safe-bottom)); }
-  .chat-input-area input { flex: 1; border-radius: 20px; padding: 9px 14px; font-size: 15px; }
-  .chat-input-area .btn { border-radius: 20px; padding: 9px 16px; flex-shrink: 0; }
-  .chat-name-tag { font-size: 11px; padding: 2px 8px; border-radius: 10px; background: var(--primary-light); color: var(--primary); margin-right: 6px; white-space: nowrap; }
-  .msg-bubble { max-width: 85%; padding: 8px 12px; border-radius: 14px; font-size: 14px; line-height: 1.5; word-break: break-word; }
-  .msg-self { align-self: flex-end; }
-  .msg-self .msg-bubble { background: var(--primary); color: #fff; border-bottom-right-radius: 4px; }
-  .msg-other { align-self: flex-start; }
-  .msg-other .msg-bubble { background: var(--card); color: var(--text); border: 1px solid var(--border); border-bottom-left-radius: 4px; }
-  .msg-row { display: flex; align-items: flex-end; gap: 6px; width: 100%; }
-  .msg-meta { font-size: 11px; color: var(--text2); margin-bottom: 2px; padding: 0 4px; }
-  .msg-self .msg-meta { text-align: right; }
-  .chat-welcome { text-align: center; padding: 30px 20px; color: var(--text2); font-size: 14px; }
-
-  /* Plans */
-  .plan-item { border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 12px; margin-bottom: 10px; }
-  .plan-item.confirmed { border-color: var(--green); background: var(--green-bg); }
-  .plan-name { font-weight: 600; font-size: 14px; }
-  .plan-meta { font-size: 12px; color: var(--text2); margin: 2px 0; display: flex; flex-wrap: wrap; gap: 8px; }
-  .plan-note { font-size: 12px; color: var(--text2); background: var(--gray-bg); padding: 6px 10px; border-radius: 8px; margin: 6px 0; }
-  .vote-group { display: flex; gap: 4px; margin: 6px 0; flex-wrap: wrap; }
-  .vote-btn { padding: 4px 12px; border: 1.5px solid var(--border); border-radius: 16px; font-size: 12px; background: none; cursor: pointer; transition: all 0.15s; font-family: inherit; }
-  .vote-btn:active { transform: scale(0.95); }
-  .vote-btn.yes { color: var(--green); border-color: var(--green); }
-  .vote-btn.yes.active { background: var(--green); color: #fff; }
-  .vote-btn.maybe { color: var(--orange); border-color: var(--orange); }
-  .vote-btn.maybe.active { background: var(--orange); color: #fff; }
-  .vote-btn.no { color: var(--red); border-color: var(--red); }
-  .vote-btn.no.active { background: var(--red); color: #fff; }
-  .vote-count { font-size: 11px; color: var(--text2); }
-  .vote-count .yc { color: var(--green); font-weight: 600; }
-  .vote-count .mc { color: var(--orange); font-weight: 600; }
-  .vote-count .nc { color: var(--red); font-weight: 600; }
-  .person-badge { display: inline-flex; align-items: center; gap: 3px; padding: 2px 8px; border-radius: 10px; font-size: 11px; margin: 1px; }
-  .p-yes { background: var(--green-bg); color: #1A7D32; }
-  .p-maybe { background: var(--orange-bg); color: #B87500; }
-  .p-no { background: var(--red-bg); color: #B81C14; }
-  .plan-header { display: flex; justify-content: space-between; align-items: flex-start; }
-  .plan-actions { display: flex; gap: 4px; flex-shrink: 0; }
-  .summary-bar { display: flex; gap: 3px; height: 20px; border-radius: 10px; overflow: hidden; margin: 6px 0; background: var(--gray-bg); }
-  .seg-yes { background: var(--green); }
-  .seg-maybe { background: var(--orange); }
-  .seg-no { background: var(--red); }
-  .winning-badge { display: inline-block; font-size: 10px; background: var(--green); color: #fff; padding: 2px 8px; border-radius: 10px; margin-left: 6px; }
-
-  /* Members */
-  .member-tag { display: inline-flex; align-items: center; gap: 4px; padding: 4px 12px; border-radius: 16px; font-size: 13px; background: var(--primary-light); color: var(--primary); margin: 3px; }
-  .member-tag .remove { cursor: pointer; font-size: 15px; opacity: 0.5; }
-  .member-tag .remove:active { opacity: 1; }
-  .member-grid { display: flex; flex-wrap: wrap; gap: 4px; }
-
-  /* Itinerary */
-  .day-item { border-left: 3px solid var(--primary); padding-left: 12px; margin-bottom: 14px; }
-  .day-title { font-weight: 600; font-size: 14px; color: var(--primary); }
-  .activity-row { display: flex; gap: 8px; margin: 4px 0; font-size: 13px; }
-  .activity-time { min-width: 42px; font-weight: 600; color: var(--primary); font-size: 12px; flex-shrink: 0; }
-
-  /* Results */
-  .stat-row { display: flex; gap: 8px; margin-bottom: 10px; }
-  .stat-box { flex: 1; text-align: center; padding: 10px; border-radius: var(--radius-sm); background: var(--gray-bg); }
-  .stat-box .num { font-size: 22px; font-weight: 700; }
-  .stat-box .lbl { font-size: 11px; color: var(--text2); margin-top: 2px; }
-  .stat-box.green { background: var(--green-bg); } .stat-box.green .num { color: var(--green); }
-  .stat-box.orange { background: var(--orange-bg); } .stat-box.orange .num { color: var(--orange); }
-  .stat-box.purple { background: var(--primary-light); } .stat-box.purple .num { color: var(--primary); }
-  table.matrix { width: 100%; border-collapse: collapse; font-size: 12px; }
-  table.matrix th, table.matrix td { padding: 5px 4px; text-align: center; border-bottom: 1px solid #f0f0f0; }
-  table.matrix th { background: var(--gray-bg); font-weight: 500; white-space: nowrap; }
-  table.matrix td:first-child { text-align: left; font-weight: 500; }
-
-  /* Online indicator */
-  .online-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--green); margin-right: 4px; animation: pulse 2s infinite; }
-  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
-  .rec-tag { display: inline-block; font-size: 10px; padding: 1px 8px; border-radius: 8px; background: var(--primary-light); color: var(--primary); margin: 1px; }
-
-  /* Toast */
-  .toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
-    background: rgba(0,0,0,0.8); color: #fff; padding: 8px 18px; border-radius: 20px;
-    font-size: 13px; z-index: 300; opacity: 0; transition: opacity 0.2s; pointer-events: none; white-space: nowrap; }
-  .toast.show { opacity: 1; }
-  .empty-state { text-align: center; padding: 24px 16px; color: var(--text2); }
-  .empty-state .icon { font-size: 40px; margin-bottom: 8px; }
-  .empty-state p { font-size: 13px; line-height: 1.6; }
-  .page::-webkit-scrollbar, .chat-msgs::-webkit-scrollbar, .modal-content::-webkit-scrollbar { display: none; }
-  @media (min-width: 600px) { .page-inner { padding: 16px; } }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; background: #f5f6fa; color: #1c1c1e; padding: 0; }
+  .loading { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; text-align: center; padding: 20px; }
+  .loading .spinner { width: 40px; height: 40px; border: 4px solid #e5e7eb; border-top-color: #5b7fff; border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 16px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading p { color: #6b7280; font-size: 14px; margin-top: 8px; }
+  .loading .title { font-size: 20px; font-weight: 700; color: #5b7fff; margin-bottom: 8px; }
+  .error { display: none; flex-direction: column; align-items: center; justify-content: center; height: 100vh; text-align: center; padding: 20px; }
+  .error .icon { font-size: 48px; margin-bottom: 12px; }
+  .error h2 { color: #1c1c1e; margin-bottom: 8px; }
+  .error p { color: #6b7280; font-size: 14px; margin-bottom: 16px; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; padding: 10px 24px; border: none; border-radius: 10px; font-size: 15px; font-weight: 500; background: #5b7fff; color: #fff; cursor: pointer; font-family: inherit; text-decoration: none; }
+  .btn:active { opacity: 0.8; }
 </style>
 </head>
 <body>
-<div class="header">
-  <h1>🗺️ 旅行计划</h1>
-  <div class="sub">实时协作 · 一起商量出行 🎉</div>
-</div>
-<div class="main">
-  <!-- Page: Chat -->
-  <div class="page active" id="page-chat">
-    <div class="chat-msgs" id="chat-msgs">
-      <div class="chat-welcome"><div style="font-size:40px;margin-bottom:8px;">💬</div><p>欢迎来到旅行计划聊天室！</p><p style="margin-top:4px;">在这里讨论出行计划，大家一起商量 🎉</p></div>
-    </div>
-    <div class="chat-input-area">
-      <input type="text" id="chat-input" placeholder="输入消息..." autocomplete="off" style="border-radius:20px;">
-      <button class="btn btn-primary" onclick="sendMessage()" style="border-radius:20px;padding:9px 18px;">发送</button>
-    </div>
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+    <div class="title">🗺️ 旅行计划</div>
+    <p>正在加载应用...</p>
   </div>
-  <!-- Page: Plans -->
-  <div class="page" id="page-plans">
-    <div class="page-inner">
-      <div class="card">
-        <div class="card-title">🤖 智能推荐</div>
-        <p style="font-size:13px;color:var(--text2);margin-bottom:10px;">根据人数和偏好，一键推荐适合的旅行方案</p>
-        <button class="btn btn-primary btn-block" onclick="aiRecommend()">✨ 智能推荐方案</button>
-      </div>
-      <div class="card">
-        <div class="card-title">📋 出行方案</div>
-        <button class="btn btn-primary btn-block" onclick="showModal('plan-modal')">＋ 添加方案</button>
-      </div>
-      <div id="plans-list"></div>
-    </div>
+  <div class="error" id="error">
+    <div class="icon">😅</div>
+    <h2>加载失败</h2>
+    <p>请检查网络后刷新页面重试</p>
+    <button class="btn" onclick="location.reload()">刷新重试</button>
   </div>
-  <!-- Page: Results -->
-  <div class="page" id="page-results">
-    <div class="page-inner"><div id="result-overview"></div><div id="result-detail"></div></div>
-  </div>
-  <!-- Page: Itinerary -->
-  <div class="page" id="page-itinerary">
-    <div class="page-inner">
-      <div class="card">
-        <div class="card-title">🗓️ 最终行程</div>
-        <p style="font-size:13px;color:var(--text2);margin-bottom:10px;">确定目的地后，安排每一天的行程</p>
-        <button class="btn btn-primary btn-block" onclick="showModal('day-modal')">＋ 添加行程日</button>
-      </div>
-      <div id="itinerary-list"></div>
-    </div>
-  </div>
-  <!-- Page: Members -->
-  <div class="page" id="page-members">
-    <div class="page-inner">
-      <div class="card">
-        <div class="card-title">👥 同行伙伴</div>
-        <div style="display:flex;gap:8px;margin-bottom:10px;">
-          <input type="text" id="member-input" placeholder="输入名字..." style="flex:1;" onkeydown="if(event.key==='Enter') addMember()">
-          <button class="btn btn-primary" onclick="addMember()">添加</button>
-        </div>
-        <div id="members-list" class="member-grid"></div>
-      </div>
-      <div class="card">
-        <div class="card-title">🟢 在线成员</div>
-        <div id="online-list" class="member-grid"><div class="empty-state" style="padding:12px;"><p>暂无在线成员</p></div></div>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="tabbar">
-  <button class="tab-item active" data-page="chat"><span class="tab-icon">💬</span>聊天</button>
-  <button class="tab-item" data-page="plans"><span class="tab-icon">📋</span>方案</button>
-  <button class="tab-item" data-page="results"><span class="tab-icon">📊</span>结果</button>
-  <button class="tab-item" data-page="itinerary"><span class="tab-icon">🗓️</span>行程</button>
-  <button class="tab-item" data-page="members"><span class="tab-icon">👥</span>伙伴</button>
-</div>
-<div class="toast" id="toast"></div>
 
-<!-- Modals -->
-<div class="modal-overlay" id="plan-modal">
-  <div class="modal-content">
-    <div class="modal-handle"></div>
-    <div class="modal-title">添加出行方案</div>
-    <div class="input-group"><label>方案名称 *</label><input type="text" id="plan-name" placeholder="例如：洛阳三日游"></div>
-    <div class="input-group"><label>出发日期</label><input type="date" id="plan-date"></div>
-    <div class="input-group"><label>结束日期</label><input type="date" id="plan-date-end"></div>
-    <div class="input-group"><label>目的地</label><input type="text" id="plan-dest" placeholder="例如：洛阳"></div>
-    <div class="input-group"><label>预算/备注（可选）</label><textarea id="plan-note" placeholder="费用预估、出行方式等"></textarea></div>
-    <div class="modal-actions"><button class="btn btn-outline" onclick="closeModal('plan-modal')">取消</button><button class="btn btn-primary" onclick="addPlan()">添加</button></div>
-  </div>
-</div>
-<div class="modal-overlay" id="day-modal">
-  <div class="modal-content">
-    <div class="modal-handle"></div>
-    <div class="modal-title">添加行程日</div>
-    <div class="input-group"><label>日期</label><input type="date" id="day-date"></div>
-    <div class="input-group"><label>标题</label><input type="text" id="day-title" placeholder="例如：第一天 - 抵达洛阳"></div>
-    <div class="input-group"><label>活动安排</label><textarea id="day-activities" rows="4" placeholder="每行一个活动，例如：&#10;09:00 集合出发&#10;12:00 午餐 @ 餐厅&#10;18:00 逛夜市"></textarea></div>
-    <div class="modal-actions"><button class="btn btn-outline" onclick="closeModal('day-modal')">取消</button><button class="btn btn-primary" onclick="addDay()">添加</button></div>
-  </div>
-</div>
-<div class="modal-overlay" id="name-modal" style="align-items:center;">
-  <div class="modal-content" style="border-radius:var(--radius);max-width:360px;padding:24px;">
-    <div style="text-align:center;font-size:40px;margin-bottom:10px;">👋</div>
-    <div class="modal-title" style="text-align:center;">输入你的名字</div>
-    <p style="font-size:13px;color:var(--text2);text-align:center;margin-bottom:14px;">这是你在聊天和投票中显示的名字</p>
-    <div class="input-group"><input type="text" id="my-name-input" placeholder="输入名字..." style="text-align:center;"></div>
-    <button class="btn btn-primary btn-block" onclick="setMyName()">进入聊天室</button>
-  </div>
-</div>
-<div class="modal-overlay" id="rec-modal">
-  <div class="modal-content">
-    <div class="modal-handle"></div>
-    <div class="modal-title">✨ 智能推荐</div>
-    <div id="rec-loading" style="text-align:center;padding:20px;color:var(--text2);">
-      <div style="font-size:36px;margin-bottom:10px;">⏳</div>
-      <p>正在为你推荐适合的方案...</p>
-    </div>
-    <div id="rec-results" style="display:none;">
-      <p style="font-size:13px;color:var(--text2);margin-bottom:12px;">点击下方方案一键添加到列表中 👇</p>
-      <div id="rec-list"></div>
-      <div class="modal-actions" style="margin-top:12px;">
-        <button class="btn btn-outline" onclick="closeModal('rec-modal')">关闭</button>
-        <button class="btn btn-primary" onclick="aiRecommend()">🔄 换一批</button>
-      </div>
-    </div>
-  </div>
-</div>
+  <!-- Load Firebase via CDN -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+  <script>
+  // Firebase config
+  const firebaseConfig = {
+    apiKey: "AIzaSyBMdduAkyVSdvz3sXtlB3jAW7L_yhin2VQ",
+    authDomain: "travel-planner-2b162.firebaseapp.com",
+    databaseURL: "https://travel-planner-2b162-default-rtdb.firebaseio.com",
+    projectId: "travel-planner-2b162",
+    storageBucket: "travel-planner-2b162.firebasestorage.app",
+    messagingSenderId: "20555551861",
+    appId: "1:20555551861:web:375a0d4cd15363f7da143c"
+  };
+  firebase.initializeApp(firebaseConfig);
+  window._firebaseDB = firebase.database();
 
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-<script>
-const firebaseConfig = {
-  apiKey: "AIzaSyBMdduAkyVSdvz3sXtlB3jAW7L_yhin2VQ",
-  authDomain: "travel-planner-2b162.firebaseapp.com",
-  databaseURL: "https://travel-planner-2b162-default-rtdb.firebaseio.com",
-  projectId: "travel-planner-2b162",
-  storageBucket: "travel-planner-2b162.firebasestorage.app",
-  messagingSenderId: "20555551861",
-  appId: "1:20555551861:web:375a0d4cd15363f7da143c"
-};
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
+  // Load the app from jsDelivr CDN
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', 'https://cdn.jsdelivr.net/gh/xianglaile-maker/travel-planner@main/index.html', true);
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      var html = xhr.responseText;
+      // Remove the original HTML head/body - keep only the content
+      var parser = new DOMParser();
+      var doc = parser.parseFromString(html, 'text/html');
+      
+      // Merge styles
+      var styles = doc.querySelectorAll('style');
+      styles.forEach(function(s) {
+        document.head.appendChild(s.cloneNode(true));
+      });
+      
+      // Merge meta tags
+      var metas = doc.querySelectorAll('meta');
+      metas.forEach(function(m) {
+        if (!m.getAttribute('charset')) {
+          document.head.appendChild(m.cloneNode(true));
+        }
+      });
+      
+      // Replace body content
+      var newBody = doc.querySelector('body');
+      if (newBody) {
+        document.body.innerHTML = newBody.innerHTML;
+      }
+      
+      // Execute scripts
+      var scripts = doc.querySelectorAll('script');
+      scripts.forEach(function(oldScript) {
+        if (oldScript.src) {
+          var newScript = document.createElement('script');
+          newScript.src = oldScript.src;
+          document.body.appendChild(newScript);
+        } else if (oldScript.textContent.trim()) {
+          var newScript = document.createElement('script');
+          newScript.textContent = oldScript.textContent;
+          document.body.appendChild(newScript);
+        }
+      });
 
-let myName = localStorage.getItem('travel_my_name') || '';
-let confirmedPlanId = null;
-let currentMembers = [];
-let toastTimer;
-
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), 2000);
-}
-function showModal(id) { document.getElementById(id).classList.add('show'); }
-function closeModal(id) { document.getElementById(id).classList.remove('show'); }
-document.querySelectorAll('.modal-overlay').forEach(m => {
-  m.addEventListener('click', function(e) { if (e.target === this) this.classList.remove('show'); });
-});
-function escapeHtml(t) { if (!t) return ''; var d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
-
-// Tab switching
-document.querySelectorAll('.tab-item').forEach(function(btn) {
-  btn.addEventListener('click', function() {
-    document.querySelectorAll('.tab-item').forEach(function(b) { b.classList.remove('active'); });
-    document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
-    this.classList.add('active');
-    document.getElementById('page-' + this.dataset.page).classList.add('active');
-  });
-});
-
-// ====== Name ======
-if (!myName) { showModal('name-modal'); }
-
-function setMyName() {
-  var n = document.getElementById('my-name-input').value.trim();
-  if (!n) { showToast('请输入名字'); return; }
-  myName = n;
-  localStorage.setItem('travel_my_name', myName);
-  closeModal('name-modal');
-  // Add to members
-  db.ref('members').once('value', function(snap) {
-    var ms = snap.val() || {};
-    if (!ms[n]) { db.ref('members/' + n).set(true); }
-  });
-  // Set online
-  var or = db.ref('online/' + n);
-  or.set(true);
-  or.onDisconnect().remove();
-  setInterval(function() { db.ref('online/' + n).set(true); }, 30000);
-  showToast('欢迎, ' + myName + '!');
-}
-
-// ====== Chat ======
-document.getElementById('chat-input').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
-});
-
-function sendMessage() {
-  if (!myName) { showModal('name-modal'); return; }
-  var text = document.getElementById('chat-input').value.trim();
-  if (!text) return;
-  document.getElementById('chat-input').value = '';
-  db.ref('messages').push({ name: myName, text: text, time: Date.now() });
-}
-
-function scrollChat() {
-  setTimeout(function() {
-    var el = document.getElementById('chat-msgs');
-    el.scrollTop = el.scrollHeight;
-  }, 50);
-}
-
-db.ref('messages').orderByKey().limitToLast(200).on('child_added', function(snap) {
-  var msg = snap.val();
-  var el = document.getElementById('chat-msgs');
-  var welcome = el.querySelector('.chat-welcome');
-  if (welcome) welcome.remove();
-  var isSelf = msg.name === myName;
-  var div = document.createElement('div');
-  div.className = 'msg-row ' + (isSelf ? 'msg-self' : 'msg-other');
-  var time = msg.time ? new Date(msg.time).toLocaleTimeString('zh-CN', {hour:'2-digit',minute:'2-digit'}) : '';
-  div.innerHTML = '<div style="max-width:85%;"><div class="msg-meta">' + (!isSelf ? '<span class="chat-name-tag">' + escapeHtml(msg.name) + '</span>' : '') + time + '</div><div class="msg-bubble">' + escapeHtml(msg.text) + '</div></div>';
-  el.appendChild(div);
-  scrollChat();
-});
-
-// ====== Members ======
-db.ref('members').on('value', function(snap) {
-  var ms = snap.val() || {};
-  currentMembers = Object.keys(ms);
-  var el = document.getElementById('members-list');
-  if (currentMembers.length === 0) {
-    el.innerHTML = '<div class="empty-state" style="padding:8px;"><p>还没有添加伙伴</p></div>';
-    return;
-  }
-  el.innerHTML = currentMembers.map(function(n) {
-    return '<span class="member-tag">' + escapeHtml(n) + '<span class="remove" onclick="removeMember(\'' + escapeHtml(n) + '\')">×</span></span>';
-  }).join('');
-});
-
-db.ref('online').on('value', function(snap) {
-  var ol = snap.val() || {};
-  var names = Object.keys(ol);
-  var el = document.getElementById('online-list');
-  if (names.length === 0) {
-    el.innerHTML = '<div class="empty-state" style="padding:8px;"><p>暂无在线成员</p></div>';
-    return;
-  }
-  el.innerHTML = names.map(function(n) {
-    return '<span class="member-tag"><span class="online-dot"></span>' + escapeHtml(n) + '</span>';
-  }).join('');
-});
-
-function addMember() {
-  if (!myName) { showModal('name-modal'); return; }
-  var input = document.getElementById('member-input');
-  var name = input.value.trim();
-  if (!name) { showToast('请输入名字'); return; }
-  db.ref('members/' + name).once('value', function(snap) {
-    if (snap.val()) { showToast('该伙伴已存在'); return; }
-    db.ref('members/' + name).set(true);
-    input.value = '';
-    showToast('已添加 ' + name);
-  });
-}
-
-function removeMember(name) {
-  if (!confirm('确定移除 ' + name + ' 吗？')) return;
-  db.ref('members/' + name).remove();
-  db.ref('votes').once('value', function(snap) {
-    var votes = snap.val() || {};
-    Object.keys(votes).forEach(function(pid) {
-      if (votes[pid] && votes[pid][name]) { db.ref('votes/' + pid + '/' + name).remove(); }
-    });
-  });
-}
-
-// ====== Plans ======
-db.ref('confirmedPlan').on('value', function(snap) { confirmedPlanId = snap.val(); });
-
-db.ref('plans').on('value', function(snap) {
-  var plans = snap.val() || {};
-  var pids = Object.keys(plans);
-  var el = document.getElementById('plans-list');
-  if (pids.length === 0) {
-    el.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p>还没有出行方案，点击上方添加吧！</p></div>';
-    return;
-  }
-  var html = '';
-  pids.forEach(function(pid) {
-    var p = plans[pid];
-    html += '<div class="plan-item" id="plan-' + pid + '"><div class="plan-header"><div><div class="plan-name">' + escapeHtml(p.name) + (pid === confirmedPlanId ? ' <span class="winning-badge">🏆 最终方案</span>' : '') + '</div><div class="plan-meta">' + (p.date ? '📅 ' + p.date + (p.dateEnd ? ' ~ ' + p.dateEnd : '') : '') + (p.dest ? ' 📍 ' + escapeHtml(p.dest) : '') + '</div></div><div class="plan-actions"><button class="btn btn-xs btn-outline" onclick="confirmPlan(\'' + pid + '\')" title="选为最终方案">✅</button><button class="btn btn-xs btn-outline" onclick="deletePlan(\'' + pid + '\',\'' + escapeHtml(p.name) + '\')">✕</button></div></div>' + (p.note ? '<div class="plan-note">💡 ' + escapeHtml(p.note) + '</div>' : '') + '<div class="vote-group" id="vg-' + pid + '"><button class="vote-btn yes" onclick="vote(\'' + pid + '\',\'yes\')">✅ 可以</button><button class="vote-btn maybe" onclick="vote(\'' + pid + '\',\'maybe\')">🤔 再看看</button><button class="vote-btn no" onclick="vote(\'' + pid + '\',\'no\')">❌ 不行</button></div><div class="summary-bar" id="sb-' + pid + '"></div><div class="vote-count" id="vc-' + pid + '">加载中...</div><div id="voters-' + pid + '"></div></div>';
-  });
-  el.innerHTML = html;
-  // Attach vote listeners
-  pids.forEach(function(pid) {
-    db.ref('votes/' + pid).off();
-    db.ref('votes/' + pid).on('value', function(snap) {
-      updateVoteUI(pid, snap.val() || {});
-    });
-  });
-});
-
-function updateVoteUI(pid, votes) {
-  var total = currentMembers.length || Object.keys(votes).length || 1;
-  var yes = 0, maybe = 0, no = 0;
-  Object.values(votes).forEach(function(v) {
-    if (v === 'yes') yes++; else if (v === 'maybe') maybe++; else if (v === 'no') no++;
-  });
-  var myVote = votes[myName] || '';
-  var btns = document.querySelectorAll('#vg-' + pid + ' .vote-btn');
-  btns.forEach(function(b) {
-    b.classList.remove('active');
-    if ((b.classList.contains('yes') && myVote === 'yes') || (b.classList.contains('maybe') && myVote === 'maybe') || (b.classList.contains('no') && myVote === 'no')) { b.classList.add('active'); }
-  });
-  var sb = document.getElementById('sb-' + pid);
-  if (sb) {
-    var max = total || 1;
-    sb.innerHTML = (yes > 0 ? '<div class="seg-yes" style="width:' + (yes/max*100) + '%"></div>' : '') + (maybe > 0 ? '<div class="seg-maybe" style="width:' + (maybe/max*100) + '%"></div>' : '') + (no > 0 ? '<div class="seg-no" style="width:' + (no/max*100) + '%"></div>' : '') + (yes+maybe+no === 0 ? '<div style="width:100%"></div>' : '');
-  }
-  var vc = document.getElementById('vc-' + pid);
-  if (vc) {
-    var pct = total > 0 ? Math.round(yes/total*100) : 0;
-    vc.innerHTML = '✅ <span class="yc">' + yes + '</span> · 🤔 <span class="mc">' + maybe + '</span> · ❌ <span class="nc">' + no + '</span> · 共' + total + '人 · ' + pct + '%可去';
-  }
-  var votersEl = document.getElementById('voters-' + pid);
-  if (votersEl) {
-    var names = Object.keys(votes);
-    votersEl.innerHTML = names.map(function(n) {
-      var v = votes[n];
-      var cls = v === 'yes' ? 'p-yes' : v === 'maybe' ? 'p-maybe' : 'p-no';
-      var icon = v === 'yes' ? '✅' : v === 'maybe' ? '🤔' : '❌';
-      return '<span class="person-badge ' + cls + '">' + icon + ' ' + escapeHtml(n) + '</span>';
-    }).join('');
-  }
-}
-
-function addPlan() {
-  if (!myName) { showModal('name-modal'); return; }
-  var name = document.getElementById('plan-name').value.trim();
-  var date = document.getElementById('plan-date').value;
-  var dateEnd = document.getElementById('plan-date-end').value;
-  var dest = document.getElementById('plan-dest').value.trim();
-  var note = document.getElementById('plan-note').value.trim();
-  if (!name) { showToast('请填写方案名称'); return; }
-  var ref = db.ref('plans').push();
-  ref.set({ name: name, date: date, dateEnd: dateEnd, dest: dest, note: note, createdBy: myName, createdAt: Date.now() });
-  db.ref('votes/' + ref.key).set({});
-  document.getElementById('plan-name').value = '';
-  document.getElementById('plan-date').value = '';
-  document.getElementById('plan-date-end').value = '';
-  document.getElementById('plan-dest').value = '';
-  document.getElementById('plan-note').value = '';
-  closeModal('plan-modal');
-  showToast('方案添加成功！');
-}
-
-function deletePlan(pid, pname) {
-  if (!confirm('确定删除「' + pname + '」吗？')) return;
-  db.ref('plans/' + pid).remove();
-  db.ref('votes/' + pid).remove();
-  if (confirmedPlanId === pid) { db.ref('confirmedPlan').set(null); }
-}
-
-function vote(pid, value) {
-  if (!myName) { showModal('name-modal'); return; }
-  var ref = db.ref('votes/' + pid + '/' + myName);
-  ref.once('value', function(snap) {
-    if (snap.val() === value) { ref.remove(); }
-    else { ref.set(value); }
-  });
-}
-
-function confirmPlan(pid) {
-  db.ref('confirmedPlan').set(pid);
-  showToast('已标记为最终方案！');
-  document.querySelectorAll('.tab-item').forEach(function(b) { b.classList.remove('active'); });
-  document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
-  document.querySelector('.tab-item[data-page="itinerary"]').classList.add('active');
-  document.getElementById('page-itinerary').classList.add('active');
-}
-
-// ====== Recommendations ======
-var AI_PLANS = [
-  { name: '洛阳古都三日游', dest: '河南·洛阳', note: '龙门石窟+白马寺+洛邑古城+老君山，人均800-1200元，历史文化之旅', tags: ['历史','文化'] },
-  { name: '云台山清凉三日游', dest: '河南·焦作', note: '红石峡+潭瀑峡+茱萸峰+猕猴谷，夏季避暑，人均600-1000元', tags: ['自然','避暑'] },
-  { name: '西安古都三日游', dest: '陕西·西安', note: '兵马俑+大唐不夜城+回民街+城墙，高铁直达，人均1200-1800元', tags: ['历史','美食'] },
-  { name: '太行大峡谷三日游', dest: '河南·安阳', note: '太行大峡谷+红旗渠+殷墟，壮美山水人文，人均700-1100元', tags: ['自然','人文'] },
-  { name: '青岛海滨三日游', dest: '山东·青岛', note: '栈桥+崂山+金沙滩+啤酒节，人均1500-2000元', tags: ['海滨','美食'] },
-  { name: '开封东京梦华三日游', dest: '河南·开封', note: '清明上河园+开封府+大相国寺+夜市小吃，人均600-900元', tags: ['文化','美食'] },
-  { name: '信阳南湾湖三日游', dest: '河南·信阳', note: '南湾湖+鸡公山+浉河夜市，品毛尖休闲慢游，人均500-800元', tags: ['休闲','自然'] },
-  { name: '武汉江城三日游', dest: '湖北·武汉', note: '黄鹤楼+东湖+户部巷+长江大桥，高铁直达，人均800-1200元', tags: ['美食','文化'] },
-  { name: '南京金陵三日游', dest: '江苏·南京', note: '中山陵+夫子庙+秦淮河+博物院，人均1000-1500元', tags: ['历史','文化'] },
-  { name: '济南泉城三日游', dest: '山东·济南', note: '趵突泉+大明湖+千佛山+芙蓉街，人均700-1000元', tags: ['休闲','自然'] },
-  { name: '洛阳+郑州双城三日游', dest: '河南·洛阳/郑州', note: '少林寺+龙门石窟+只有河南·戏剧幻城，人均900-1300元', tags: ['文化','体验'] },
-  { name: '万仙山+郭亮村三日游', dest: '河南·新乡', note: '万仙山+郭亮挂壁公路+八里沟，摄影徒步，人均600-900元', tags: ['自然','摄影'] },
-  { name: '老君山+重渡沟三日游', dest: '河南·栾川', note: '老君山金顶+重渡沟竹林瀑布，避暑胜地，人均600-900元', tags: ['自然','避暑'] },
-  { name: '长沙美食三日游', dest: '湖南·长沙', note: '橘子洲+岳麓山+茶颜悦色+文和友，人均1000-1400元', tags: ['美食','网红'] },
-  { name: '北京古都三日游', dest: '北京', note: '故宫+长城+天坛+南锣鼓巷，高铁可达，人均1500-2500元', tags: ['历史','经典'] },
-  { name: '成都慢生活三日游', dest: '四川·成都', note: '熊猫基地+宽窄巷子+火锅+人民公园，人均1200-1800元', tags: ['美食','休闲'] },
-  { name: '黄山+宏村三日游', dest: '安徽·黄山', note: '黄山奇松+宏村古村落+屯溪老街，人均1500-2000元', tags: ['自然','摄影'] },
-  { name: '张家界三日游', dest: '湖南·张家界', note: '天子山+金鞭溪+玻璃栈道+凤凰古城，人均1200-1800元', tags: ['自然','探险'] }
-];
-
-function aiRecommend() {
-  if (!myName) { showModal('name-modal'); return; }
-  showModal('rec-modal');
-  document.getElementById('rec-loading').style.display = 'block';
-  document.getElementById('rec-results').style.display = 'none';
-  setTimeout(function() {
-    document.getElementById('rec-loading').style.display = 'none';
-    document.getElementById('rec-results').style.display = 'block';
-    var shuffled = AI_PLANS.sort(function() { return Math.random() - 0.5; });
-    var today = new Date();
-    var dayOfWeek = today.getDay();
-    var daysUntilFriday = (5 - dayOfWeek + 7) % 7 || 7;
-    var startDate = new Date(today);
-    startDate.setDate(today.getDate() + daysUntilFriday);
-    var picks = shuffled.slice(0, 5).map(function(p, i) {
-      var s = new Date(startDate);
-      s.setDate(startDate.getDate() + i * 7);
-      var e = new Date(s);
-      e.setDate(e.getDate() + 2);
-      var fmt = function(d) { return d.toISOString().slice(0,10); };
-      return { name: p.name, date: fmt(s), dateEnd: fmt(e), dest: p.dest, note: p.note, tags: p.tags || [] };
-    });
-    var el = document.ge
+      // Inject Firebase DB reference into the app's scope
+      setTimeout(function() {
+        if (typeof db === 'undefined' && window._firebaseDB) {
+          window.db = window._firebaseDB;
+        }
+        // Remove loading
+        var loadingEl = document.getElementById('loading');
+        if (loadingEl) loadingEl.style.display = 'none';
+      }, 500);
+    } else {
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('error').style.display = 'flex';
+    }
+  };
+  xhr.onerror = function() {
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('error').style.display = 'flex';
+  };
+  xhr.send();
+  </script>
+</body>
+</html>
