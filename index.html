@@ -628,20 +628,27 @@ function loadData() {
       data = {
         members: ['小明', '小红', '小刚', '小丽', '阿花', '大刘', '阿强'],
         plans: [
-          { id: 'p1', name: '方案A — 三亚阳光之旅', date: '2026-07-15', dateEnd: '2026-07-18', dest: '三亚', note: '预计每人花费约3000元' },
-          { id: 'p2', name: '方案B — 成都美食之旅', date: '2026-07-22', dateEnd: '2026-07-25', dest: '成都', note: '预计每人花费约2500元' },
-          { id: 'p3', name: '方案C — 云南大理行', date: '2026-08-05', dateEnd: '2026-08-08', dest: '大理', note: '预计每人花费约2800元' }
+          { id: 'p1', name: '方案A — 洛阳古都三日游（河南）', date: '2026-07-11', dateEnd: '2026-07-13', dest: '河南·洛阳', note: '龙门石窟+白马寺+洛邑古城+应天门，预计人均800-1200元' },
+          { id: 'p2', name: '方案B — 云台山清凉三日游（河南）', date: '2026-07-18', dateEnd: '2026-07-20', dest: '河南·焦作', note: '红石峡+潭瀑峡+茱萸峰，夏季避暑好去处，预计人均600-1000元' },
+          { id: 'p3', name: '方案C — 西安古都三日游（陕西）', date: '2026-07-25', dateEnd: '2026-07-27', dest: '陕西·西安', note: '兵马俑+大唐不夜城+城墙+回民街，高铁直达，预计人均1200-1800元' },
+          { id: 'p4', name: '方案D — 太行大峡谷三日游（河南）', date: '2026-08-01', dateEnd: '2026-08-03', dest: '河南·安阳', note: '太行大峡谷+红旗渠+殷墟，壮美山水人文，预计人均700-1100元' },
+          { id: 'p5', name: '方案E — 青岛海滨三日游（山东）', date: '2026-08-07', dateEnd: '2026-08-09', dest: '山东·青岛', note: '栈桥+崂山+金沙滩+啤酒节，预计人均1500-2000元' },
+          { id: 'p6', name: '方案F — 信阳南湾湖三日游（河南）', date: '2026-08-14', dateEnd: '2026-08-16', dest: '河南·信阳', note: '南湾湖+鸡公山+浉河夜市，休闲慢游品毛尖，预计人均500-800元' },
+          { id: 'p7', name: '方案G — 开封东京梦华三日游（河南）', date: '2026-08-21', dateEnd: '2026-08-23', dest: '河南·开封', note: '清明上河园+开封府+大相国寺+夜市小吃，预计人均600-900元' }
         ],
         votes: {
           'p1': { '小明': 'yes', '小红': 'yes', '小刚': 'maybe', '小丽': 'yes', '阿花': 'no', '大刘': 'yes', '阿强': 'maybe' },
-          'p2': { '小明': 'maybe', '小红': 'no', '小刚': 'yes', '小丽': 'maybe', '阿花': 'yes', '大刘': 'maybe', '阿强': 'yes' },
-          'p3': { '小明': 'no', '小红': 'maybe', '小刚': 'yes', '小丽': 'yes', '阿花': 'maybe', '大刘': 'no', '阿强': 'yes' }
+          'p2': { '小明': 'maybe', '小红': 'no', '小刚': 'yes', '小丽': 'maybe', '阿花': 'yes', '大刘': 'no', '阿强': 'yes' },
+          'p3': { '小明': 'yes', '小红': 'yes', '小刚': 'yes', '小丽': 'no', '阿花': 'maybe', '大刘': 'yes', '阿强': 'yes' },
+          'p4': { '小明': 'no', '小红': 'maybe', '小刚': 'no', '小丽': 'yes', '阿花': 'yes', '大刘': 'maybe', '阿强': 'no' },
+          'p5': { '小明': 'yes', '小红': 'yes', '小刚': 'no', '小丽': 'yes', '阿花': 'yes', '大刘': 'no', '阿强': 'maybe' },
+          'p6': { '小明': 'maybe', '小红': 'no', '小刚': 'maybe', '小丽': 'maybe', '阿花': 'no', '大刘': 'yes', '阿强': 'yes' },
+          'p7': { '小明': 'no', '小红': 'yes', '小刚': 'yes', '小丽': 'no', '阿花': 'maybe', '大刘': 'maybe', '阿强': 'no' }
         },
         itinerary: [
-          { id: 'd1', date: '2026-07-22', title: '第一天 — 抵达成都', activities: '15:00 到达成都双流机场\n16:00 入住春熙路附近酒店\n18:00 火锅 @ 小龙坎\n20:00 春熙路散步' },
-          { id: 'd2', date: '2026-07-23', title: '第二天 — 熊猫与美食', activities: '09:00 大熊猫繁育基地\n12:30 午餐 @ 陈麻婆豆腐\n14:00 宽窄巷子\n18:00 晚餐 @ 串串香\n20:00 九眼桥夜景' },
-          { id: 'd3', date: '2026-07-24', title: '第三天 — 文化之旅', activities: '09:00 武侯祠\n11:30 锦里古街\n13:00 午餐 @ 钵钵鸡\n15:00 人民公园喝盖碗茶\n18:00 火锅 @ 蜀大侠' },
-          { id: 'd4', date: '2026-07-25', title: '第四天 — 返程', activities: '09:00 早餐后自由活动\n12:00 退房\n14:00 前往机场\n16:30 飞回家~' }
+          { id: 'd1', date: '2026-07-11', title: '第一天 — 抵达洛阳，初探古城', activities: '10:00 郑州东站集合，乘高铁赴洛阳（约40分钟）\n11:00 入住洛邑古城附近民宿\n12:00 午餐 @ 老城十字街（洛阳水席）\n14:00 游览龙门石窟（西山石窟+东山石窟）\n18:00 晚餐 @ 管记水席\n20:00 夜游洛邑古城+丽景门' },
+          { id: 'd2', date: '2026-07-12', title: '第二天 — 白马寺与博物馆', activities: '08:30 早餐 @ 龙鳞路第一家牛肉汤\n09:30 游览白马寺（中国第一古刹）\n12:00 午餐 @ 西工小街\n14:00 洛阳博物馆（免费，需预约）\n17:00 应天门遗址+明堂天堂\n19:00 晚餐 @ 老雒阳面馆\n20:30 九州池夜景' },
+          { id: 'd3', date: '2026-07-13', title: '第三天 — 老君山（或自由活动）', activities: '07:00 出发前往老君山（约2.5h车程）\n10:00 乘索道上山，游览金顶道观群\n12:00 山顶午餐（自备简餐）\n13:00 十里画屏徒步\n16:00 返程下山\n18:30 返回洛阳，高铁回家~' }
         ]
       };
     }
@@ -1043,60 +1050,4 @@ function clearItinerary() {
 function renderItinerary() {
   const el = document.getElementById('itinerary-list');
   if (data.itinerary.length === 0) {
-    el.innerHTML = '<div class="card"><div class="empty-state"><div class="icon">🗓️</div><p>还没有最终行程安排。<br>确定方案后，点击上方按钮添加每天的行程吧！</p></div></div>';
-    return;
-  }
-
-  el.innerHTML = data.itinerary.map((day, idx) => {
-    const activitiesHtml = day.activities
-      ? day.activities.split('\n').filter(l => l.trim()).map(line => {
-          const timeMatch = line.match(/^(\d{1,2}:\d{2})\s*(.*)/);
-          if (timeMatch) {
-            return `<div class="activity-item">
-              <div class="activity-time">${timeMatch[1]}</div>
-              <div class="activity-desc">${timeMatch[2]}</div>
-            </div>`;
-          }
-          return `<div class="activity-item">
-            <div class="activity-time"></div>
-            <div class="activity-desc">${line}</div>
-          </div>`;
-        }).join('')
-      : '<div style="color:var(--text-secondary);font-size:14px;">暂无安排</div>';
-
-    return `<div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-        <div class="day-item" style="border:none;padding:0;flex:1;">
-          <div class="day-title">
-            ${day.date ? '📅 ' + day.date : '第' + (idx+1) + '天'}
-          </div>
-          <div style="font-weight:600;font-size:16px;margin-bottom:12px;">${day.title}</div>
-          ${activitiesHtml}
-        </div>
-        <button class="btn btn-sm btn-outline" onclick="deleteDay('${day.id}')" style="flex-shrink:0;">✕</button>
-      </div>
-    </div>`;
-  }).join('');
-
-  // Add clear button
-  el.innerHTML += `<div class="no-print" style="text-align:center;margin-top:8px;">
-    <button class="btn btn-sm btn-outline" onclick="clearItinerary()">🗑️ 清空所有行程</button>
-  </div>`;
-}
-
-// ====== Print support ======
-function printItinerary() {
-  window.print();
-}
-
-// ====== Init ======
-loadData();
-renderMembers();
-renderPlans();
-
-// If there's itinerary data, pre-render it
-if (data.itinerary.length > 0) renderItinerary();
-
-</script>
-</body>
-</html>
+    el.innerHTML = '<div class="card"><div class="empty-state"><div class="icon">🗓️</div><p>还�
