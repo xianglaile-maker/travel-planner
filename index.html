@@ -490,4 +490,63 @@ function renderResults() {
     stats[id] = { yes: yes, maybe: maybe, no: no, votes: vs };
   }
   ro.innerHTML = '<div style="display:flex;gap:8px;margin-bottom:10px">';
-  ro.innerHTML += '<
+  ro.innerHTML += '</div>';
+  ids.sort(function(a, b) { return stats[b].yes - stats[a].yes || stats[b].maybe - stats[a].maybe; });
+  var h = '<div class="card"><h2>📋 方案对比</h2>';
+  for (var i = 0; i < ids.length; i++) {
+    var id = ids[i];
+    var p = plans[id];
+    var s = stats[id];
+    var isC = (id === confirmed);
+    h += '<div class="plan" style="' + (isC ? 'border-color:#34C759;background:#E8F8ED' : '') + '">';
+    h += '<div style="display:flex;justify-content:space-between">';
+    h += '<div class="pn">' + escapeHTML(p.name) + (isC ? ' 🏆' : '') + '</div>';
+    h += '<div class="pm">✅ ' + s.yes + ' / 🤔 ' + s.maybe + '</div></div>';
+    h += '<div class="bar">';
+    if (s.yes > 0) h += '<div class="bg" style="width:' + (s.yes / (mems.length || 1) * 100) + '%"></div>';
+    if (s.maybe > 0) h += '<div class="bo" style="width:' + (s.maybe / (mems.length || 1) * 100) + '%"></div>';
+    if (s.no > 0) h += '<div class="br" style="width:' + (s.no / (mems.length || 1) * 100) + '%"></div>';
+    h += '</div>';
+    var vnames = Object.keys(s.votes);
+    if (vnames.length > 0) {
+      h += '<div>';
+      for (var w = 0; w < vnames.length; w++) {
+        var nm = vnames[w];
+        var x = s.votes[nm];
+        var bg = (x === 'yes' ? '#E8F8ED;color:#1A7D32' : x === 'maybe' ? '#FFF4E5;color:#B87500' : '#FFEDEC;color:#B81C14');
+        var icon = (x === 'yes' ? '✅' : x === 'maybe' ? '🤔' : '❌');
+        h += '<span class="tag" style="background:' + bg + '">' + icon + ' ' + escapeHTML(nm) + '</span>';
+      }
+      h += '</div>';
+    }
+    h += '</div>';
+  }
+  h += '</div>';
+  if (mems.length > 0) {
+    h += '<div class="card"><h2>📋 成员意向矩阵</h2><div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12px">';
+    h += '<tr style="background:#F2F2F7"><th style="padding:5px 4px;text-align:left">成员</th>';
+    for (var i = 0; i < ids.length; i++) {
+      var id = ids[i];
+      var name = plans[id].name;
+      if (name.length > 5) name = name.slice(0, 5) + '…';
+      h += '<th style="padding:5px 4px;text-align:center;white-space:nowrap">' + escapeHTML(name) + '</th>';
+    }
+    h += '</tr>';
+    for (var m = 0; m < mems.length; m++) {
+      h += '<tr><td style="padding:5px 4px;font-weight:500">' + escapeHTML(mems[m]) + '</td>';
+      for (var i = 0; i < ids.length; i++) {
+        var id = ids[i];
+        var x = (stats[id]?.votes || {})[mems[m]];
+        h += '<td style="padding:5px 4px;text-align:center">' + (x === 'yes' ? '✅' : x === 'maybe' ? '🤔' : x === 'no' ? '❌' : '—') + '</td>';
+      }
+      h += '</tr>';
+    }
+    h += '</table></div></div>';
+  }
+  rd.innerHTML = h;
+}
+
+renderMembers();
+</script>
+</body>
+</html>
